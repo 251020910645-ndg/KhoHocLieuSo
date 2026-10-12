@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>EconHub – Kho học liệu số Kinh tế Tài chính</title>
+    <link rel="stylesheet" href="CSS/style.css">
+    <style>
+        :root{--bg:#F6F8FA;--card:#fff;--ink:#12263F;--mute:#5B6B7F;--line:#D5DDE6;--teal:#1D3278;--teal-d:#142659;--amber:#F2B134;--grid:#E4EAF0;
+            box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+        @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1A2B;--card:#16253A;--ink:#E8EEF5;--mute:#9DB0C5;--line:#2A3D56;--teal:#7C9BFF;--teal-d:#A9BEFF;--grid:#1B2D45}}
+        :root[data-theme="dark"]{--bg:#0E1A2B;--card:#16253A;--ink:#E8EEF5;--mute:#9DB0C5;--line:#2A3D56;--teal:#7C9BFF;--teal-d:#A9BEFF;--grid:#1B2D45}
+        #bgart{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+        *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+        body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Source Sans 3",system-ui,sans-serif}
+        h1,h2,h3{font-family:Sora,system-ui,sans-serif;line-height:1.2;margin:0}
+        .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+        header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0;flex-wrap:wrap}
+        .logo{font:700 20px Sora,sans-serif}.logo i{font-style:normal;color:var(--teal)}
+        nav{display:flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px}
+        nav button{border:0;background:none;color:var(--mute);font:600 15px "Source Sans 3",sans-serif;padding:8px 16px;border-radius:999px;cursor:pointer}
+        nav button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+        #snd{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 14px;font:600 14px "Source Sans 3",sans-serif;cursor:pointer}
+        #snd[aria-pressed="false"]{color:var(--mute);text-decoration:line-through}
+        button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+        .banner{display:grid;grid-template-columns:1fr;gap:0;background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;margin:6px 0 8px}
+        .bt{padding:26px 28px}
+        .bn{font:400 clamp(38px,6vw,64px)/1 Anton,Impact,sans-serif;color:var(--teal);letter-spacing:.5px;margin:0 0 10px}
+        .bt .sub{font:700 15px Sora,sans-serif;margin:0 0 14px}
+        .pill{display:inline-block;border-radius:999px;padding:9px 20px;font:700 15px Sora,sans-serif;margin:0 8px 8px 0;background:var(--teal);color:#fff}
+        .pill.soft{background:var(--grid);color:var(--ink)}
+        .bt .ct{color:var(--mute);font-size:15px;margin:8px 0 0}
+        .hero{display:grid;grid-template-columns:1.05fr 1fr;gap:32px;align-items:center;padding:28px 0 40px}
+        .hero h1{font-size:clamp(28px,4.4vw,46px);margin-bottom:14px}
+        .hero p{color:var(--mute);max-width:46ch;margin:0 0 18px}
+        .btn{display:inline-block;background:var(--teal);color:#fff;border:0;border-radius:8px;padding:11px 20px;font:600 16px "Source Sans 3",sans-serif;cursor:pointer}
+        .btn:hover{background:var(--teal-d)}.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line)}
+        .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+        .chart svg{width:100%;height:auto;display:block}
+        .chart label{display:flex;gap:10px;align-items:center;font-size:14px;color:var(--mute);margin-top:6px}
+        .chart input{flex:1;accent-color:var(--teal)}
+        .eq{font:600 14px Sora,sans-serif;margin:4px 0 0}
+        .bar{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px}
+        .chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 14px "Source Sans 3",sans-serif;cursor:pointer}
+        .chip[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;padding-bottom:40px}
+        .card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;text-align:left;cursor:pointer;padding:0;color:inherit;font:inherit}
+        .card:hover{border-color:var(--teal)}
+        .thumb{height:120px;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:20px 20px;position:relative;border-bottom:1px solid var(--line)}
+        .thumb svg{position:absolute;inset:0;width:100%;height:100%}
+        .thumb b{position:absolute;right:8px;bottom:8px;background:var(--ink);color:var(--bg);font-size:12px;padding:1px 8px;border-radius:4px}
+        .card .in{padding:12px 14px 16px}.card small{color:var(--teal-d);font-weight:600}.card h3{font-size:17px;margin:2px 0 4px}
+        .done{color:var(--teal-d);font-weight:600;font-size:14px}
+        .panel{display:none}.panel.on{display:block}
+        .fc-wrap{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:20px 0 48px}
+        .flash{height:230px;perspective:900px;cursor:pointer;border:0;background:none;padding:0;width:100%}
+        .flash .face{position:absolute;inset:0;background:var(--card);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;backface-visibility:hidden;transition:transform .45s}
+        .flash{position:relative}.flash .back{transform:rotateY(180deg);background:var(--amber);color:#12263F}
+        .flash.flip .front{transform:rotateY(-180deg)}.flash.flip .back{transform:rotateY(0)}
+        .flash .front b{font:700 28px Sora,sans-serif}.flash small{color:var(--mute)}.flash .back small{color:#12263F}
+        .row{display:flex;gap:10px;margin-top:12px;align-items:center;flex-wrap:wrap}
+        .box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+        .opt{display:block;width:100%;text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin-top:8px;font:inherit;color:inherit;cursor:pointer}
+        .opt.ok{background:var(--teal);color:#fff;border-color:var(--teal)}.opt.no{border-color:#C4473A;color:#C4473A}
+        .prog{height:12px;background:var(--grid);border-radius:99px;overflow:hidden;margin:10px 0 24px}.prog i{display:block;height:100%;background:var(--teal);width:0;transition:width .4s}
+        dialog{width:min(760px,94vw);max-height:92vh;border:1px solid var(--line);border-radius:16px;background:var(--bg);color:var(--ink);padding:0}
+        dialog::backdrop{background:rgba(10,20,35,.6)}
+        .dh{display:flex;justify-content:space-between;align-items:start;padding:18px 22px 0;gap:12px}
+        .x{border:0;background:var(--card);color:var(--ink);border-radius:50%;width:36px;height:36px;font-size:18px;cursor:pointer;border:1px solid var(--line)}
+        .db{padding:14px 22px 22px}
+        .player{aspect-ratio:16/9;background:var(--ink);border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;color:#C9D6E3;padding:16px;font-size:14px;overflow:hidden}
+        .player iframe{width:100%;height:100%;border:0}
+        .terms{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.terms span{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:3px 10px;font-size:14px}
+        h4{margin:18px 0 4px;font:700 15px Sora,sans-serif}
+        footer{color:var(--mute);font-size:14px;padding:20px 0 40px;border-top:1px solid var(--line)}
+        @media(max-width:760px){.hero,.fc-wrap,.banner{grid-template-columns:1fr}}
+        @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+    </style>
+</head>
+<body>
+<svg id="bgart" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true"></svg>
+<div class="wrap">
+    <header class="top">
+        <div class="logo">Econ<i>Hub</i></div>
+        <nav role="tablist" aria-label="Điều hướng">
+            <button role="tab" aria-selected="true" data-tab="lib">Thư viện bài giảng</button>
+            <button role="tab" aria-selected="false" data-tab="lang">Học ngoại ngữ</button>
+            <button role="tab" aria-selected="false" data-tab="prog">Tiến độ</button>
+        </nav>
+        <button id="snd" aria-pressed="true" title="Bật/tắt âm thanh">🔊 Âm thanh</button>
+    </header>
+
+    <section id="lib" class="panel on">
+        <div class="banner">
+            <div class="bt">
+                <h2 class="bn">VNU - ULIS - FIED</h2>
+                <p class="sub">Chương trình liên kết quốc tế với ĐH Southern New Hampshire (Hoa Kỳ)</p>
+                <span class="pill">Cử nhân Kinh tế - Tài chính (BS EFI)</span><span class="pill soft">Kho học liệu số bằng tiếng Anh</span>
+            </div>
+        </div>
+        <div class="hero">
+            <div>
+                <h1>Học kinh tế tài chính bằng tiếng Anh, qua video AI</h1>
+                <p>Kiến thức nền của ngành trong các bài giảng ngắn 3–7 phút. Mỗi bài có phụ đề, thuật ngữ chính và câu hỏi kiểm tra.</p>
+                <button class="btn" onclick="document.getElementById('grid').scrollIntoView({behavior:'smooth'})">Xem bài giảng</button>
+            </div>
+            <div class="chart" aria-label="Minh họa cung cầu">
+                <svg viewBox="0 0 400 270" role="img" aria-label="Đồ thị cung cầu">
+                    <g stroke="var(--line)"><path d="M40 20V250H385" fill="none" stroke-width="2"/></g>
+                    <text x="46" y="16" font-size="12" fill="var(--mute)">Price</text><text x="350" y="266" font-size="12" fill="var(--mute)">Quantity</text>
+                    <line id="sL" stroke="var(--teal)" stroke-width="4" stroke-linecap="round"/>
+                    <line id="dL" stroke="var(--amber)" stroke-width="4" stroke-linecap="round"/>
+                    <text id="sT" font-size="13" font-weight="700" fill="var(--teal)">Supply</text>
+                    <text id="dT" font-size="13" font-weight="700" fill="var(--amber)">Demand</text>
+                    <line id="vq" stroke="var(--mute)" stroke-dasharray="4 4"/><line id="vp" stroke="var(--mute)" stroke-dasharray="4 4"/>
+                    <circle id="pt" r="7" fill="var(--ink)"/>
+                </svg>
+                <label for="shift">Demand ↔<input id="shift" type="range" min="-30" max="40" value="0"></label>
+                <p class="eq" id="eq"></p>
+            </div>
+        </div>
+        <div class="bar" id="filters" role="group" aria-label="Lọc theo môn"></div>
+        <div class="grid" id="grid"></div>
+    </section>
+
+    <section id="lang" class="panel">
+        <div class="fc-wrap">
+            <div>
+                <h2>Flashcard thuật ngữ</h2>
+                <p style="color:var(--mute)">Bấm vào thẻ để lật. Thuật ngữ lấy từ các bài giảng.</p>
+                <button class="flash" id="flash" aria-label="Thẻ từ vựng"><div class="face front"><b id="fEn"></b><small>Bấm để xem nghĩa</small></div><div class="face back"><b id="fVi"></b><span id="fDef"></span></div></button>
+                <div class="row"><button class="btn ghost" id="prev">Thẻ trước</button><button class="btn" id="next">Thẻ tiếp</button><span id="cnt" style="color:var(--mute)"></span></div>
+            </div>
+            <div class="box">
+                <h2 style="font-size:20px">Đố nhanh: chọn từ tiếng Anh</h2>
+                <p id="qVi" style="font-size:18px;font-weight:600;margin:12px 0 0"></p>
+                <div id="qOpts"></div>
+                <div class="row"><span id="qScore" style="color:var(--mute)"></span><button class="btn ghost" id="qNext">Câu khác</button></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="prog" class="panel">
+        <h2 style="margin-top:20px">Tiến độ học tập</h2>
+        <div class="prog"><i id="pBar"></i></div>
+        <p id="pTxt" style="color:var(--mute)"></p>
+        <div id="pList" class="grid"></div>
+    </section>
+
+    <footer>VNU - ULIS - FIED · Bản demo. Thay VIDEO_ID trong dữ liệu bài giảng bằng ID video YouTube của bạn để hiển thị video thật.</footer>
+</div>
+
+<dialog id="dlg">
+    <div class="dh"><div><small id="dCourse" style="color:var(--teal-d);font-weight:600"></small><h2 id="dTitle" style="font-size:22px"></h2></div><button class="x" id="dx" aria-label="Đóng">✕</button></div>
+    <div class="db">
+        <div class="player" id="player"></div>
+        <h4>Key terms</h4><div class="terms" id="dTerms"></div>
+        <h4>Summary</h4><p id="dSum" style="margin:0"></p>
+        <h4>Check yourself</h4><p id="dQ" style="margin:0;font-weight:600"></p><div id="dOpts"></div>
+        <div class="row"><button class="btn" id="dDone">Đánh dấu đã học</button><span id="dMsg" class="done"></span></div>
+    </div>
+</dialog>
+
+<script>
+    // ===== DỮ LIỆU: thay videoId bằng ID video YouTube thật =====
+    const LESSONS=[
+        {id:1,course:"Principles of Economics",title:"Scarcity and Choice",min:5,videoId:"",terms:[["scarcity","sự khan hiếm","Limited resources against unlimited wants."],["opportunity cost","chi phí cơ hội","The value of the next best alternative you give up."]],sum:"Every society faces scarcity, so it must choose. Each choice has an opportunity cost.",q:"What is opportunity cost?",o:["The money price of a good","The value of the best alternative given up","The cost of production","A government tax"],a:1},
+        {id:2,course:"Microeconomics",title:"Demand and Supply",min:6,videoId:"",terms:[["demand","cầu","Quantity buyers want at each price."],["equilibrium","trạng thái cân bằng","The price where quantity supplied equals quantity demanded."]],sum:"The market price settles where the demand and supply curves meet. A shift in either curve moves the equilibrium.",q:"If demand rises and supply is unchanged, the equilibrium price...",o:["falls","rises","stays the same","becomes zero"],a:1},
+        {id:3,course:"Microeconomics",title:"Price Elasticity",min:5,videoId:"",terms:[["elasticity","độ co giãn","How strongly quantity responds to a change in price."],["substitute","hàng hóa thay thế","A good that can replace another."]],sum:"Demand is elastic when consumers react strongly to price changes. Goods with many substitutes tend to be more elastic.",q:"Which good is likely MOST elastic?",o:["Insulin","Salt","A specific brand of soda","Electricity"],a:2},
+        {id:4,course:"Macroeconomics",title:"What is GDP?",min:6,videoId:"",terms:[["GDP","tổng sản phẩm quốc nội","Total value of final goods and services produced in a country in a year."],["final good","hàng hóa cuối cùng","A good sold to its end user."]],sum:"GDP measures the size of an economy. Only final goods are counted to avoid double counting.",q:"GDP counts...",o:["All goods ever made","Final goods and services produced in a period","Only exports","Only government spending"],a:1},
+        {id:5,course:"Macroeconomics",title:"Inflation Basics",min:5,videoId:"",terms:[["inflation","lạm phát","A sustained rise in the general price level."],["purchasing power","sức mua","How much a unit of money can buy."]],sum:"When inflation rises, each unit of money buys less, so purchasing power falls.",q:"Inflation reduces...",o:["Prices","Purchasing power","Output","Population"],a:1},
+        {id:6,course:"Money & Banking",title:"Monetary Policy",min:7,videoId:"",terms:[["interest rate","lãi suất","The price of borrowing money."],["central bank","ngân hàng trung ương","The institution that manages a country's money supply."]],sum:"Central banks raise interest rates to cool inflation and cut them to encourage borrowing and growth.",q:"To fight high inflation, a central bank usually...",o:["Cuts rates","Raises rates","Prints more money","Removes reserves"],a:1}
+    ];
+    const $=s=>document.querySelector(s);
+    // ===== ẢNH NỀN KINH TẾ (vẽ bằng SVG): nến chứng khoán, đường tăng trưởng, cột, ký hiệu tiền tệ =====
+    (function(){
+        let seed=11;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+        let h='<defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--teal)" stop-opacity=".28"/><stop offset="1" stop-color="var(--teal)" stop-opacity="0"/></linearGradient><pattern id="gp" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="var(--grid)" stroke-width="1"/></pattern></defs>';
+        h+='<rect width="1440" height="900" fill="url(#gp)" opacity=".8"/>';
+        // cột GDP góc phải trên
+        for(let i=0;i<8;i++){const bh=40+i*i*5+rnd()*20;h+=`<rect x="${1090+i*40}" y="${230-bh}" width="26" height="${bh}" rx="3" fill="var(--ink)" opacity=".07"/>`}
+        // ký hiệu tiền tệ và chỉ số
+        [["$",90,170,150],["%",1210,430,120],["€",640,120,110],["₫",300,330,120],["¥",1320,120,100],["GDP ↑",470,520,70],["CPI",900,330,70]].forEach(t=>{
+            h+=`<text x="${t[1]}" y="${t[2]}" font-family="Sora,sans-serif" font-weight="700" font-size="${t[3]}" fill="var(--ink)" opacity=".055">${t[0]}</text>`});
+        // nến + đường xu hướng
+        let y=760,pts=[];
+        for(let i=0;i<36;i++){
+            const x=20+i*40,o=y;y=Math.max(260,y-(rnd()*38-9));const c=y;
+            const hi=Math.min(o,c)-rnd()*24,lo=Math.max(o,c)+rnd()*24,col=c<o?"var(--teal)":"var(--amber)";
+            h+=`<g opacity=".38"><line x1="${x}" x2="${x}" y1="${hi}" y2="${lo}" stroke="${col}" stroke-width="2"/><rect x="${x-8}" y="${Math.min(o,c)}" width="16" height="${Math.max(Math.abs(o-c),4)}" fill="${col}"/></g>`;
+            pts.push(x+","+(c-10));
+        }
+        h+=`<polygon points="${pts.join(" ")} 1420,900 20,900" fill="url(#ag)"/>`;
+        h+=`<polyline points="${pts.join(" ")}" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linejoin="round" opacity=".5"/>`;
+        document.getElementById("bgart").innerHTML=h;
+    })();
+
+    // ===== ÂM THANH (tạo bằng Web Audio, không cần file) =====
+    let AC=null,soundOn=true;
+    try{soundOn=localStorage.getItem("econhub-sound")!=="off"}catch(e){}
+    function tone(f,t0,d,type,vol){
+        if(!soundOn)return;
+        try{
+            AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+            if(AC.state==="suspended")AC.resume();
+            const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+t0;
+            o.type=type||"sine";o.frequency.setValueAtTime(f,t);
+            g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||0.15,t+0.015);
+            g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+            o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+0.02);
+        }catch(e){}
+    }
+    const SFX={
+        click:()=>tone(660,0,.07,"triangle",.12),
+        tab:()=>{tone(520,0,.07,"triangle",.12);tone(780,.06,.09,"triangle",.1)},
+        open:()=>{tone(440,0,.08,"sine",.12);tone(660,.07,.12,"sine",.12)},
+        close:()=>{tone(660,0,.07,"sine",.1);tone(440,.06,.1,"sine",.1)},
+        flip:()=>{tone(900,0,.05,"square",.05);tone(600,.04,.07,"square",.05)},
+        ok:()=>{tone(523,0,.12,"sine",.16);tone(784,.1,.2,"sine",.16)},
+        no:()=>{tone(220,0,.18,"sawtooth",.08);tone(180,.12,.22,"sawtooth",.08)},
+        done:()=>{[523,659,784,1047].forEach((f,i)=>tone(f,i*.09,.22,"triangle",.14))},
+        tick:()=>tone(400+Math.random()*60,0,.03,"sine",.06)
+    };
+    $("#snd").onclick=()=>{
+        soundOn=!soundOn;
+        $("#snd").setAttribute("aria-pressed",soundOn);
+        $("#snd").textContent=soundOn?"🔊 Âm thanh":"🔇 Âm thanh";
+        try{localStorage.setItem("econhub-sound",soundOn?"on":"off")}catch(e){}
+        if(soundOn)SFX.ok();
+    };
+    if(!soundOn){$("#snd").setAttribute("aria-pressed","false");$("#snd").textContent="🔇 Âm thanh"}
+
+    let done=new Set();
+    try{done=new Set(JSON.parse(localStorage.getItem("econhub-done")||"[]"))}catch(e){}
+    function save(){try{localStorage.setItem("econhub-done",JSON.stringify([...done]))}catch(e){}}
+
+    // Tabs
+    document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
+        SFX.tab();
+        document.querySelectorAll("nav button").forEach(x=>x.setAttribute("aria-selected",x===b));
+        document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.id===b.dataset.tab));
+        if(b.dataset.tab==="prog")renderProg();
+    });
+
+    // Supply-demand hero
+    function curve(){
+        const s=+$("#shift").value, X=q=>40+q*3.4, Y=p=>250-p*1.55;
+        const set=(id,q1,p1,q2,p2)=>{const e=$(id);e.setAttribute("x1",X(q1));e.setAttribute("y1",Y(p1));e.setAttribute("x2",X(q2));e.setAttribute("y2",Y(p2))};
+        set("#dL",0,100+s,95,5+s); set("#sL",0,20,95,115);
+        const q=(80+s)/2,p=20+q;
+        $("#pt").setAttribute("cx",X(q));$("#pt").setAttribute("cy",Y(p));
+        set("#vq",q,0,q,p);set("#vp",0,p,q,p);
+        $("#dT").setAttribute("x",X(80));$("#dT").setAttribute("y",Y(25+s)-8);
+        $("#sT").setAttribute("x",X(78));$("#sT").setAttribute("y",Y(98)-8);
+        $("#eq").textContent="Equilibrium: price "+p.toFixed(0)+", quantity "+q.toFixed(0);
+    }
+    let lastTick=0;$("#shift").oninput=()=>{const n=Date.now();if(n-lastTick>70){SFX.tick();lastTick=n}curve()};curve();
+
+    // Library
+    let cur="All";
+    const courses=["All",...new Set(LESSONS.map(l=>l.course))];
+    function renderFilters(){$("#filters").innerHTML=courses.map(c=>`<button class="chip" aria-pressed="${c===cur}" data-c="${c}">${c==="All"?"Tất cả":c}</button>`).join("");
+        document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{SFX.click();cur=b.dataset.c;renderFilters();renderGrid()})}
+    function cardHTML(l){return `<button class="card" data-id="${l.id}"><div class="thumb"><svg viewBox="0 0 250 120"><path d="M20 100 L120 30" stroke="var(--amber)" stroke-width="4" fill="none"/><path d="M20 30 L120 100" stroke="var(--teal)" stroke-width="4" fill="none"/></svg><b>${l.min}:00</b></div><div class="in"><small>${l.course}</small><h3>${l.title}</h3>${done.has(l.id)?'<span class="done">✓ Đã học</span>':'<span style="color:var(--mute);font-size:14px">Video AI · English</span>'}</div></button>`}
+    function renderGrid(){$("#grid").innerHTML=LESSONS.filter(l=>cur==="All"||l.course===cur).map(cardHTML).join("");bind("#grid")}
+    function bind(sel){document.querySelectorAll(sel+" .card").forEach(c=>c.onclick=()=>openLesson(+c.dataset.id))}
+
+    // Lesson dialog
+    let L=null;
+    function openLesson(id){
+        L=LESSONS.find(l=>l.id===id);SFX.open();
+        $("#dCourse").textContent=L.course;$("#dTitle").textContent=L.title;
+        $("#player").innerHTML=L.videoId?`<iframe src="https://www.youtube.com/embed/${L.videoId}" allowfullscreen title="${L.title}"></iframe>`:"Chỗ đặt video AI. Dán videoId YouTube vào dữ liệu bài giảng để hiển thị ở đây.";
+        $("#dTerms").innerHTML=L.terms.map(t=>`<span><b>${t[0]}</b> · ${t[1]}</span>`).join("");
+        $("#dSum").textContent=L.sum;$("#dQ").textContent=L.q;
+        $("#dOpts").innerHTML=L.o.map((t,i)=>`<button class="opt" data-i="${i}">${t}</button>`).join("");
+        document.querySelectorAll("#dOpts .opt").forEach(b=>b.onclick=()=>{
+            document.querySelectorAll("#dOpts .opt").forEach(x=>x.classList.remove("ok","no"));
+            const right=+b.dataset.i===L.a;b.classList.add(right?"ok":"no");right?SFX.ok():SFX.no()});
+        $("#dMsg").textContent=done.has(L.id)?"✓ Đã học":"";
+        $("#dlg").showModal();
+    }
+    $("#dx").onclick=()=>{SFX.close();$("#dlg").close()};
+    $("#dDone").onclick=()=>{SFX.done();done.add(L.id);save();$("#dMsg").textContent="✓ Đã học";renderGrid()};
+
+    // Flashcards + quiz
+    const TERMS=LESSONS.flatMap(l=>l.terms);
+    let fi=0;
+    function showCard(){const t=TERMS[fi];$("#flash").classList.remove("flip");$("#fEn").textContent=t[0];$("#fVi").textContent=t[1];$("#fDef").textContent=t[2];$("#cnt").textContent=(fi+1)+" / "+TERMS.length}
+    $("#flash").onclick=()=>{SFX.flip();$("#flash").classList.toggle("flip")};
+    $("#next").onclick=()=>{SFX.click();fi=(fi+1)%TERMS.length;showCard()};
+    $("#prev").onclick=()=>{SFX.click();fi=(fi-1+TERMS.length)%TERMS.length;showCard()};
+    let sc=0,tot=0,ans;
+    function newQ(){
+        const t=TERMS[Math.floor(Math.random()*TERMS.length)];ans=t[0];
+        const opts=[t[0]];while(opts.length<4){const x=TERMS[Math.floor(Math.random()*TERMS.length)][0];if(!opts.includes(x))opts.push(x)}
+        opts.sort(()=>Math.random()-.5);
+        $("#qVi").textContent=t[1];
+        $("#qOpts").innerHTML=opts.map(o=>`<button class="opt">${o}</button>`).join("");
+        document.querySelectorAll("#qOpts .opt").forEach(b=>b.onclick=()=>{
+            if(document.querySelector("#qOpts .ok"))return;tot++;
+            if(b.textContent===ans){sc++;b.classList.add("ok");SFX.ok()}else{b.classList.add("no");SFX.no();document.querySelectorAll("#qOpts .opt").forEach(x=>{if(x.textContent===ans)x.classList.add("ok")})}
+            $("#qScore").textContent="Đúng "+sc+"/"+tot});
+    }
+    $("#qNext").onclick=()=>{SFX.click();newQ()};
+
+    // Progress
+    function renderProg(){
+        const n=done.size,t=LESSONS.length;
+        $("#pBar").style.width=(n/t*100)+"%";
+        $("#pTxt").textContent="Đã hoàn thành "+n+" / "+t+" bài.";
+        $("#pList").innerHTML=LESSONS.filter(l=>done.has(l.id)).map(cardHTML).join("")||'<p style="color:var(--mute)">Chưa có bài nào. Mở một bài giảng và bấm "Đánh dấu đã học".</p>';
+        bind("#pList");
+    }
+    renderFilters();renderGrid();showCard();newQ();
+</script>
+</body>
+</html>
