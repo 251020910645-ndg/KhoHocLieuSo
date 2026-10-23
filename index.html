@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>EconHub – Kho học liệu số Kinh tế Tài chính</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="CSS/styles.css">
     <style>
         :root{--bg:#F6F8FA;--card:#fff;--ink:#12263F;--mute:#5B6B7F;--line:#D5DDE6;--teal:#1D3278;--teal-d:#142659;--amber:#F2B134;--grid:#E4EAF0;
@@ -12,36 +15,35 @@
         :root[data-theme="dark"]{--bg:#0E1A2B;--card:#16253A;--ink:#E8EEF5;--mute:#9DB0C5;--line:#2A3D56;--teal:#7C9BFF;--teal-d:#A9BEFF;--grid:#1B2D45}
         #bgart{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
         *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
-        body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Source Sans 3",system-ui,sans-serif}
-        h1,h2,h3{font-family:Sora,system-ui,sans-serif;line-height:1.2;margin:0}
+        body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Source Sans 3",system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
+        h1,h2,h3{font-family:'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;line-height:1.2;margin:0}
         .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
         header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0;flex-wrap:wrap}
-        .logo{font:700 20px Sora,sans-serif}.logo i{font-style:normal;color:var(--teal)}
+        .logo{font:700 20px 'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}.logo i{font-style:normal;color:var(--teal)}
         nav{display:flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px}
-        nav button{border:0;background:none;color:var(--mute);font:600 15px "Source Sans 3",sans-serif;padding:8px 16px;border-radius:999px;cursor:pointer}
+        nav button{border:0;background:none;color:var(--mute);font:600 15px "Source Sans 3",system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;padding:8px 16px;border-radius:999px;cursor:pointer}
         nav button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
-        #snd{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 14px;font:600 14px "Source Sans 3",sans-serif;cursor:pointer}
+        #snd{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 14px;font:600 14px "Source Sans 3",system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;cursor:pointer}
         #snd[aria-pressed="false"]{color:var(--mute);text-decoration:line-through}
         button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
         .banner{display:grid;grid-template-columns:1fr;gap:0;background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;margin:6px 0 8px}
         .bt{padding:26px 28px}
-        .bn{font:400 clamp(38px,6vw,64px)/1 Anton,Impact,sans-serif;color:var(--teal);letter-spacing:.5px;margin:0 0 10px}
-        .bt .sub{font:700 15px Sora,sans-serif;margin:0 0 14px}
-        .pill{display:inline-block;border-radius:999px;padding:9px 20px;font:700 15px Sora,sans-serif;margin:0 8px 8px 0;background:var(--teal);color:#fff}
+        .bn{font:800 clamp(10px,calc(4vw - 4px),40px)/1.15 'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:var(--teal);letter-spacing:0;white-space:nowrap;margin:0 0 10px}        .bt .sub{font:700 15px 'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;margin:0 0 14px}
+        .pill{display:inline-block;border-radius:999px;padding:9px 20px;font:700 15px 'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;margin:0 8px 8px 0;background:var(--teal);color:#fff}
         .pill.soft{background:var(--grid);color:var(--ink)}
         .bt .ct{color:var(--mute);font-size:15px;margin:8px 0 0}
         .hero{display:grid;grid-template-columns:1.05fr 1fr;gap:32px;align-items:center;padding:28px 0 40px}
         .hero h1{font-size:clamp(28px,4.4vw,46px);margin-bottom:14px}
         .hero p{color:var(--mute);max-width:46ch;margin:0 0 18px}
-        .btn{display:inline-block;background:var(--teal);color:#fff;border:0;border-radius:8px;padding:11px 20px;font:600 16px "Source Sans 3",sans-serif;cursor:pointer}
+        .btn{display:inline-block;background:var(--teal);color:#fff;border:0;border-radius:8px;padding:11px 20px;font:600 16px "Source Sans 3",system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;cursor:pointer}
         .btn:hover{background:var(--teal-d)}.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line)}
         .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
         .chart svg{width:100%;height:auto;display:block}
         .chart label{display:flex;gap:10px;align-items:center;font-size:14px;color:var(--mute);margin-top:6px}
         .chart input{flex:1;accent-color:var(--teal)}
-        .eq{font:600 14px Sora,sans-serif;margin:4px 0 0}
+        .eq{font:600 14px 'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;margin:4px 0 0}
         .bar{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px}
-        .chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 14px "Source Sans 3",sans-serif;cursor:pointer}
+        .chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 14px "Source Sans 3",system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;cursor:pointer}
         .chip[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
         .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;padding-bottom:40px}
         .card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;text-align:left;cursor:pointer;padding:0;color:inherit;font:inherit}
@@ -57,7 +59,7 @@
         .flash .face{position:absolute;inset:0;background:var(--card);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;backface-visibility:hidden;transition:transform .45s}
         .flash{position:relative}.flash .back{transform:rotateY(180deg);background:var(--amber);color:#12263F}
         .flash.flip .front{transform:rotateY(-180deg)}.flash.flip .back{transform:rotateY(0)}
-        .flash .front b{font:700 28px Sora,sans-serif}.flash small{color:var(--mute)}.flash .back small{color:#12263F}
+        .flash .front b{font:700 28px 'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}.flash small{color:var(--mute)}.flash .back small{color:#12263F}
         .row{display:flex;gap:10px;margin-top:12px;align-items:center;flex-wrap:wrap}
         .box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
         .opt{display:block;width:100%;text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin-top:8px;font:inherit;color:inherit;cursor:pointer}
@@ -71,7 +73,7 @@
         .player{aspect-ratio:16/9;background:var(--ink);border-radius:10px;display:flex;align-items:center;justify-content:center;text-align:center;color:#C9D6E3;padding:16px;font-size:14px;overflow:hidden}
         .player iframe{width:100%;height:100%;border:0}
         .terms{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.terms span{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:3px 10px;font-size:14px}
-        h4{margin:18px 0 4px;font:700 15px Sora,sans-serif}
+        h4{margin:18px 0 4px;font:700 15px 'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
         footer{color:var(--mute);font-size:14px;padding:20px 0 40px;border-top:1px solid var(--line)}
         @media(max-width:760px){.hero,.fc-wrap,.banner{grid-template-columns:1fr}}
         @media(prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -105,8 +107,7 @@
     <section id="lib" class="panel on">
         <div class="banner">
             <div class="bt">
-                <h2 class="bn">VNU - ULIS - FIED</h2>
-                <span class="pill">Cử nhân Kinh tế - Tài chính (BS EFI)</span><span class="pill soft">Kho học liệu số bằng tiếng Anh</span>
+                <h2 class="bn">Kho học Liệu Kinh tế số bằng Tiếng Anh</h2>
             </div>
         </div>
         <div class="hero">
@@ -159,7 +160,7 @@
     </section>
 
     <section id="adm" class="panel"><h2 style="margin-top:24px">Quản trị</h2><div id="admBox"></div></section>
-    <footer>VNU - ULIS - FIED · EconHub – Kho học liệu số Kinh tế Tài chính</footer>
+    <footer>EconHub</footer>
 </div>
 
 <div id="toast" role="status"></div>
@@ -201,7 +202,7 @@
         for(let i=0;i<8;i++){const bh=40+i*i*5+rnd()*20;h+=`<rect x="${1090+i*40}" y="${230-bh}" width="26" height="${bh}" rx="3" fill="var(--ink)" opacity=".07"/>`}
         // ký hiệu tiền tệ và chỉ số
         [["$",90,170,150],["%",1210,430,120],["€",640,120,110],["₫",300,330,120],["¥",1320,120,100],["GDP ↑",470,520,70],["CPI",900,330,70]].forEach(t=>{
-            h+=`<text x="${t[1]}" y="${t[2]}" font-family="Sora,sans-serif" font-weight="700" font-size="${t[3]}" fill="var(--ink)" opacity=".055">${t[0]}</text>`});
+            h+=`<text x="${t[1]}" y="${t[2]}" font-family="Be Vietnam Pro,Arial,sans-serif" font-weight="700" font-size="${t[3]}" fill="var(--ink)" opacity=".055">${t[0]}</text>`});
         // nến + đường xu hướng
         let y=760,pts=[];
         for(let i=0;i<36;i++){
