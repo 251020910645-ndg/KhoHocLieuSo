@@ -75,7 +75,18 @@
         footer{color:var(--mute);font-size:14px;padding:20px 0 40px;border-top:1px solid var(--line)}
         @media(max-width:760px){.hero,.fc-wrap,.banner{grid-template-columns:1fr}}
         @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+        .player video{width:100%;height:100%;background:#000}
+        .adm-form{display:grid;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin:0 0 20px}
+        .adm-form label{display:grid;gap:4px;font-weight:600;font-size:14px}
+        .adm-form input,.adm-form textarea,.adm-form select{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;color:inherit}
+        .adm-form textarea{min-height:84px;resize:vertical}
+        .adm-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        .adm-row{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-bottom:8px}
+        .btn.bad{background:#B3392F}.btn.ghost2{background:none;color:var(--ink);border:1px solid var(--line)}
+        #toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:10px;display:none;z-index:99;max-width:90vw}
+        @media(max-width:760px){.adm-2{grid-template-columns:1fr}}
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 <svg id="bgart" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true"></svg>
@@ -86,6 +97,7 @@
             <button role="tab" aria-selected="true" data-tab="lib">Thư viện bài giảng</button>
             <button role="tab" aria-selected="false" data-tab="lang">Học ngoại ngữ</button>
             <button role="tab" aria-selected="false" data-tab="prog">Tiến độ</button>
+            <button role="tab" aria-selected="false" data-tab="adm">Quản trị</button>
         </nav>
         <button id="snd" aria-pressed="true" title="Bật/tắt âm thanh">🔊 Âm thanh</button>
     </header>
@@ -94,7 +106,6 @@
         <div class="banner">
             <div class="bt">
                 <h2 class="bn">VNU - ULIS - FIED</h2>
-                <p class="sub">Chương trình liên kết quốc tế với ĐH Southern New Hampshire (Hoa Kỳ)</p>
                 <span class="pill">Cử nhân Kinh tế - Tài chính (BS EFI)</span><span class="pill soft">Kho học liệu số bằng tiếng Anh</span>
             </div>
         </div>
@@ -147,8 +158,11 @@
         <div id="pList" class="grid"></div>
     </section>
 
-    <footer>VNU - ULIS - FIED · Bản demo. Thay VIDEO_ID trong dữ liệu bài giảng bằng ID video YouTube của bạn để hiển thị video thật.</footer>
+    <section id="adm" class="panel"><h2 style="margin-top:24px">Quản trị</h2><div id="admBox"></div></section>
+    <footer>VNU - ULIS - FIED · EconHub – Kho học liệu số Kinh tế Tài chính</footer>
 </div>
+
+<div id="toast" role="status"></div>
 
 <dialog id="dlg">
     <div class="dh"><div><small id="dCourse" style="color:var(--teal-d);font-weight:600"></small><h2 id="dTitle" style="font-size:22px"></h2></div><button class="x" id="dx" aria-label="Đóng">✕</button></div>
@@ -163,7 +177,12 @@
 
 <script>
     // ===== DỮ LIỆU: thay videoId bằng ID video YouTube thật =====
-    const LESSONS=[
+    const CFG = {
+        url: "https://bhmzyxjkepedyyonghee.supabase.co/rest/v1/",
+        key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJobXp5eGprZXBlZHl5b25naGVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3NTY3MjIsImV4cCI6MjEwODMzMjcyMn0.6dXucs4_GCJ0_REjIW0zaI8ZzGb0P8KWMT_nKC6UpC8",
+        bucket: "videos"
+    };
+    const DEMO=[
         {id:1,course:"Principles of Economics",title:"Scarcity and Choice",min:5,videoId:"",terms:[["scarcity","sự khan hiếm","Limited resources against unlimited wants."],["opportunity cost","chi phí cơ hội","The value of the next best alternative you give up."]],sum:"Every society faces scarcity, so it must choose. Each choice has an opportunity cost.",q:"What is opportunity cost?",o:["The money price of a good","The value of the best alternative given up","The cost of production","A government tax"],a:1},
         {id:2,course:"Microeconomics",title:"Demand and Supply",min:6,videoId:"",terms:[["demand","cầu","Quantity buyers want at each price."],["equilibrium","trạng thái cân bằng","The price where quantity supplied equals quantity demanded."]],sum:"The market price settles where the demand and supply curves meet. A shift in either curve moves the equilibrium.",q:"If demand rises and supply is unchanged, the equilibrium price...",o:["falls","rises","stays the same","becomes zero"],a:1},
         {id:3,course:"Microeconomics",title:"Price Elasticity",min:5,videoId:"",terms:[["elasticity","độ co giãn","How strongly quantity responds to a change in price."],["substitute","hàng hóa thay thế","A good that can replace another."]],sum:"Demand is elastic when consumers react strongly to price changes. Goods with many substitutes tend to be more elastic.",q:"Which good is likely MOST elastic?",o:["Insulin","Salt","A specific brand of soda","Electricity"],a:2},
@@ -171,6 +190,7 @@
         {id:5,course:"Macroeconomics",title:"Inflation Basics",min:5,videoId:"",terms:[["inflation","lạm phát","A sustained rise in the general price level."],["purchasing power","sức mua","How much a unit of money can buy."]],sum:"When inflation rises, each unit of money buys less, so purchasing power falls.",q:"Inflation reduces...",o:["Prices","Purchasing power","Output","Population"],a:1},
         {id:6,course:"Money & Banking",title:"Monetary Policy",min:7,videoId:"",terms:[["interest rate","lãi suất","The price of borrowing money."],["central bank","ngân hàng trung ương","The institution that manages a country's money supply."]],sum:"Central banks raise interest rates to cool inflation and cut them to encourage borrowing and growth.",q:"To fight high inflation, a central bank usually...",o:["Cuts rates","Raises rates","Prints more money","Removes reserves"],a:1}
     ];
+    let LESSONS=DEMO;
     const $=s=>document.querySelector(s);
     // ===== ẢNH NỀN KINH TẾ (vẽ bằng SVG): nến chứng khoán, đường tăng trưởng, cột, ký hiệu tiền tệ =====
     (function(){
@@ -240,6 +260,7 @@
         document.querySelectorAll("nav button").forEach(x=>x.setAttribute("aria-selected",x===b));
         document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.id===b.dataset.tab));
         if(b.dataset.tab==="prog")renderProg();
+        if(b.dataset.tab==="adm")renderAdm();
     });
 
     // Supply-demand hero
@@ -258,7 +279,7 @@
 
     // Library
     let cur="All";
-    const courses=["All",...new Set(LESSONS.map(l=>l.course))];
+    let courses=["All",...new Set(LESSONS.map(l=>l.course))];
     function renderFilters(){$("#filters").innerHTML=courses.map(c=>`<button class="chip" aria-pressed="${c===cur}" data-c="${c}">${c==="All"?"Tất cả":c}</button>`).join("");
         document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{SFX.click();cur=b.dataset.c;renderFilters();renderGrid()})}
     function cardHTML(l){return `<button class="card" data-id="${l.id}"><div class="thumb"><svg viewBox="0 0 250 120"><path d="M20 100 L120 30" stroke="var(--amber)" stroke-width="4" fill="none"/><path d="M20 30 L120 100" stroke="var(--teal)" stroke-width="4" fill="none"/></svg><b>${l.min}:00</b></div><div class="in"><small>${l.course}</small><h3>${l.title}</h3>${done.has(l.id)?'<span class="done">✓ Đã học</span>':'<span style="color:var(--mute);font-size:14px">Video AI · English</span>'}</div></button>`}
@@ -270,7 +291,7 @@
     function openLesson(id){
         L=LESSONS.find(l=>l.id===id);SFX.open();
         $("#dCourse").textContent=L.course;$("#dTitle").textContent=L.title;
-        $("#player").innerHTML=L.videoId?`<iframe src="https://www.youtube.com/embed/${L.videoId}" allowfullscreen title="${L.title}"></iframe>`:"Chỗ đặt video AI. Dán videoId YouTube vào dữ liệu bài giảng để hiển thị ở đây.";
+        $("#player").innerHTML=L.videoUrl?`<video controls preload="metadata" src="${L.videoUrl}"></video>`:L.videoId?`<iframe src="https://www.youtube.com/embed/${L.videoId}" allowfullscreen title="${L.title}"></iframe>`:"Bài này chưa có video.";
         $("#dTerms").innerHTML=L.terms.map(t=>`<span><b>${t[0]}</b> · ${t[1]}</span>`).join("");
         $("#dSum").textContent=L.sum;$("#dQ").textContent=L.q;
         $("#dOpts").innerHTML=L.o.map((t,i)=>`<button class="opt" data-i="${i}">${t}</button>`).join("");
@@ -284,14 +305,15 @@
     $("#dDone").onclick=()=>{SFX.done();done.add(L.id);save();$("#dMsg").textContent="✓ Đã học";renderGrid()};
 
     // Flashcards + quiz
-    const TERMS=LESSONS.flatMap(l=>l.terms);
+    let TERMS=LESSONS.flatMap(l=>l.terms);
     let fi=0;
-    function showCard(){const t=TERMS[fi];$("#flash").classList.remove("flip");$("#fEn").textContent=t[0];$("#fVi").textContent=t[1];$("#fDef").textContent=t[2];$("#cnt").textContent=(fi+1)+" / "+TERMS.length}
+    function showCard(){if(!TERMS.length){$("#fEn").textContent="—";$("#fVi").textContent="—";$("#fDef").textContent="";$("#cnt").textContent="0 / 0";return}fi=Math.min(fi,TERMS.length-1);const t=TERMS[fi];$("#flash").classList.remove("flip");$("#fEn").textContent=t[0];$("#fVi").textContent=t[1];$("#fDef").textContent=t[2];$("#cnt").textContent=(fi+1)+" / "+TERMS.length}
     $("#flash").onclick=()=>{SFX.flip();$("#flash").classList.toggle("flip")};
     $("#next").onclick=()=>{SFX.click();fi=(fi+1)%TERMS.length;showCard()};
     $("#prev").onclick=()=>{SFX.click();fi=(fi-1+TERMS.length)%TERMS.length;showCard()};
     let sc=0,tot=0,ans;
     function newQ(){
+        if(new Set(TERMS.map(x=>x[0])).size<4){$("#qVi").textContent="Cần ít nhất 4 thuật ngữ khác nhau để đố.";$("#qOpts").innerHTML="";return}
         const t=TERMS[Math.floor(Math.random()*TERMS.length)];ans=t[0];
         const opts=[t[0]];while(opts.length<4){const x=TERMS[Math.floor(Math.random()*TERMS.length)][0];if(!opts.includes(x))opts.push(x)}
         opts.sort(()=>Math.random()-.5);
@@ -307,11 +329,82 @@
     // Progress
     function renderProg(){
         const n=done.size,t=LESSONS.length;
-        $("#pBar").style.width=(n/t*100)+"%";
+        $("#pBar").style.width=(t?n/t*100:0)+"%";
         $("#pTxt").textContent="Đã hoàn thành "+n+" / "+t+" bài.";
         $("#pList").innerHTML=LESSONS.filter(l=>done.has(l.id)).map(cardHTML).join("")||'<p style="color:var(--mute)">Chưa có bài nào. Mở một bài giảng và bấm "Đánh dấu đã học".</p>';
         bind("#pList");
     }
+
+    // ===== BACKEND (Supabase) + QUẢN TRỊ =====
+    const sb=(CFG.url&&window.supabase)?supabase.createClient(CFG.url,CFG.key):null;
+    let user=null;
+    const toast=t=>{const e=$("#toast");e.textContent=t;e.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(()=>e.style.display="none",3500)};
+    const esc=x=>String(x==null?"":x).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    const ytId=u=>{u=String(u||"").trim();const m=u.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/);return m?m[1]:(/^[\w-]{11}$/.test(u)?u:"")};
+    const fromRow=r=>({id:r.id,course:r.course,title:r.title,min:r.minutes,videoId:r.video_id||"",videoUrl:r.video_url||"",terms:r.terms||[],sum:r.sum||"",q:r.q||"",o:r.o||[],a:r.a||0});
+    function refresh(){
+        courses=["All",...new Set(LESSONS.map(l=>l.course))];if(!courses.includes(cur))cur="All";
+        TERMS=LESSONS.flatMap(l=>l.terms);fi=0;
+        renderFilters();renderGrid();showCard();newQ();
+    }
+    async function loadData(){
+        if(!sb){LESSONS=DEMO;refresh();return}
+        const r=await sb.from("lessons").select("*").order("id",{ascending:false});
+        if(r.error){toast("Không tải được dữ liệu: "+r.error.message);LESSONS=[]}else LESSONS=r.data.map(fromRow);
+        refresh();
+    }
+    function renderAdm(){
+        const b=$("#admBox");
+        if(!sb){b.innerHTML='<p style="color:var(--mute)">Chưa kết nối Supabase nên chưa đăng bài được. Điền <b>CFG.url</b> và <b>CFG.key</b> trong index.html.</p>';return}
+        if(!user){
+            b.innerHTML='<form class="adm-form" id="lf" style="max-width:380px"><label>Email quản trị<input name="em" type="email" required autocomplete="username"></label><label>Mật khẩu<input name="pw" type="password" required autocomplete="current-password"></label><button class="btn" type="submit">Đăng nhập</button></form>';
+            $("#lf").onsubmit=async e=>{e.preventDefault();const f=e.target.elements;const r=await sb.auth.signInWithPassword({email:f.em.value,password:f.pw.value});if(r.error)toast("Đăng nhập không được: "+r.error.message)};
+            return;
+        }
+        b.innerHTML=`<p style="color:var(--mute)">Đang đăng nhập: ${esc(user.email)} <button class="btn ghost2" id="lo" style="padding:6px 14px">Đăng xuất</button></p>
+        <form class="adm-form" id="af"><input type="hidden" name="lid"><input type="hidden" name="old">
+        <div class="adm-2"><label>Tên bài giảng<input name="title" required></label><label>Môn học<input name="course" required placeholder="Ví dụ: Microeconomics"></label></div>
+        <div class="adm-2"><label>Thời lượng (phút)<input name="min" type="number" min="1" max="60" value="5" required></label><label>Link YouTube (hoặc ID)<input name="yt" placeholder="https://youtu.be/..."></label></div>
+        <label>Hoặc tải video lên (.mp4, tối đa 50 MB)<input name="file" type="file" accept="video/*"></label>
+        <label>Thuật ngữ (mỗi dòng: english = tiếng Việt = giải nghĩa)<textarea name="terms" placeholder="demand = cầu = Quantity buyers want at each price."></textarea></label>
+        <label>Tóm tắt (Summary)<textarea name="sum"></textarea></label>
+        <label>Câu hỏi kiểm tra<input name="q"></label>
+        <div class="adm-2"><label>4 đáp án (mỗi dòng một đáp án)<textarea name="o"></textarea></label><label>Đáp án đúng<select name="a"><option value="0">Dòng 1</option><option value="1">Dòng 2</option><option value="2">Dòng 3</option><option value="3">Dòng 4</option></select></label></div>
+        <div class="row"><button class="btn" type="submit">Đăng bài</button><button class="btn ghost2" type="button" id="cl">Làm mới form</button></div></form>
+        <h3>Bài đã đăng</h3><div id="al">${LESSONS.map(l=>`<div class="adm-row"><span>${esc(l.title)} <small style="color:var(--mute)">· ${esc(l.course)}</small></span><span><button class="btn ghost2" data-e="${l.id}" style="padding:6px 14px">Sửa</button> <button class="btn bad" data-d="${l.id}" style="padding:6px 14px">Xóa</button></span></div>`).join("")||'<p style="color:var(--mute)">Chưa có bài nào.</p>'}</div>`;
+        $("#lo").onclick=()=>sb.auth.signOut();$("#cl").onclick=renderAdm;$("#af").onsubmit=saveLesson;
+        $("#al").onclick=e=>{if(e.target.dataset.e)editLesson(+e.target.dataset.e);if(e.target.dataset.d)delLesson(+e.target.dataset.d)};
+    }
+    function editLesson(id){
+        const l=LESSONS.find(x=>x.id===id),f=$("#af").elements;
+        f.lid.value=l.id;f.old.value=l.videoUrl;f.title.value=l.title;f.course.value=l.course;f.min.value=l.min;f.yt.value=l.videoId;
+        f.terms.value=l.terms.map(t=>t.join(" = ")).join("\n");f.sum.value=l.sum;f.q.value=l.q;f.o.value=l.o.join("\n");f.a.value=l.a;
+        $("#af").scrollIntoView();
+    }
+    async function delLesson(id){
+        if(!confirm("Xóa bài giảng này?"))return;
+        const r=await sb.from("lessons").delete().eq("id",id);
+        if(r.error)return toast("Lỗi: "+r.error.message);
+        toast("Đã xóa bài");await loadData();renderAdm();
+    }
+    async function saveLesson(e){
+        e.preventDefault();const f=e.target.elements,btn=e.target.querySelector("[type=submit]");btn.disabled=true;
+        try{
+            let url=f.old.value;const file=f.file.files[0];
+            if(file){const nm=Date.now()+"-"+file.name.replace(/[^\w.-]/g,"_");const u=await sb.storage.from(CFG.bucket).upload(nm,file,{contentType:file.type});if(u.error)throw u.error;url=sb.storage.from(CFG.bucket).getPublicUrl(nm).data.publicUrl}
+            const terms=f.terms.value.split("\n").map(s=>s.split("=").map(x=>x.trim())).filter(a=>a.length>=2&&a[0]).map(a=>[a[0],a[1],a.slice(2).join("=")]);
+            const o=f.o.value.split("\n").map(x=>x.trim()).filter(Boolean);
+            const row={title:f.title.value.trim(),course:f.course.value.trim(),minutes:+f.min.value,video_id:ytId(f.yt.value),video_url:url,terms,sum:f.sum.value.trim(),q:f.q.value.trim(),o,a:+f.a.value};
+            const id=f.lid.value;
+            const r=id?await sb.from("lessons").update(row).eq("id",+id):await sb.from("lessons").insert(row);
+            if(r.error)throw r.error;
+            toast(id?"Đã cập nhật bài":"Đã đăng bài");await loadData();renderAdm();
+        }catch(err){toast("Lỗi: "+(err.message||err));btn.disabled=false}
+    }
+    (async()=>{
+        if(sb){const s=await sb.auth.getSession();user=s.data.session?s.data.session.user:null;sb.auth.onAuthStateChange((_,s)=>{user=s?s.user:null;if($("#adm").classList.contains("on"))renderAdm()})}
+        await loadData();
+    })();
     renderFilters();renderGrid();showCard();newQ();
 </script>
 </body>
