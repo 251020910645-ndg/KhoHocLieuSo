@@ -394,7 +394,13 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=x=>String(x==null?"":x).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const toast=t=>{const e=$("#toast");e.textContent=t;e.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(()=>e.style.display="none",3500)};
-const ytId=u=>{u=String(u||"").trim();const m=u.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);return m?m[1]:(/^[\w-]{11}$/.test(u)?u:"")};
+const ytId = u => {
+  u = String(u || "").trim();
+  if (!u) return "";
+  const m = u.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
+  if (m && m[1]) return m[1];
+  return /^[\w-]{11}$/.test(u) ? u : "";
+};
 const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 
 /* ================= NỀN KINH TẾ (SVG) ================= */
@@ -527,10 +533,26 @@ function renderLesson(){
 function head(){return `<h2>Bước ${step+1}. ${STEPS[step].t}</h2><p class="goal">${STEPS[step].goal}</p>`}
 function navBtns(nextLabel,disabled){return `<div class="nav">${step>0?'<button class="btn ghost" id="back">← Bước trước</button>':"<span></span>"}<button class="btn" id="next" ${disabled?"disabled":""}>${nextLabel||"Tiếp tục →"}</button></div>`}
 function wireNav(){const b=$("#back");if(b)b.onclick=()=>{step--;renderLesson()};$("#next").onclick=()=>{markStep(L.id,step);step++;renderLesson()}}
-function stVideo(el){
-  const v=L.videoUrl?`<video controls preload="metadata" src="${esc(L.videoUrl)}"></video>`:L.videoId?`<iframe src="https://www.youtube-nocookie.com/embed/${esc(L.videoId)}?cc_load_policy=1&rel=0" allowfullscreen title="${esc(L.title)}"></iframe>`:
-   `<div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="15" height="14" rx="2"/><path d="M17 10l5-3v10l-5-3"/></svg><div style="font-weight:600">Video bài này đang được sản xuất</div><div style="font-size:13px;opacity:.8;margin-top:4px">Bạn vẫn có thể học tiếp thuật ngữ và tự kiểm tra ở các bước sau.</div></div>`;
-  el.innerHTML=head()+`<div class="player">${v}</div>`+navBtns(L.videoId||L.videoUrl?"Đã xem xong →":"Bỏ qua, học thuật ngữ →");wireNav();
+function stVideo(el) {
+  let yt = L.videoId || "";
+  let mp4 = L.videoUrl || "";
+
+  // Tự động chuyển đổi nếu người dùng dán link MP4 vào ô YouTube/ID
+  if (yt && (yt.startsWith("http") || yt.includes(".mp4"))) {
+    if (yt.includes(".mp4") || yt.includes("/storage/v1/object/public/")) {
+      mp4 = yt;
+      yt = "";
+    } else {
+      yt = ytId(yt);
+    }
+  }
+
+  const v = yt ? `<iframe src="https://www.youtube-nocookie.com/embed/${esc(yt)}?autoplay=0&rel=0" allowfullscreen title="${esc(L.title)}"></iframe>` :
+            mp4 ? `<video controls preload="metadata" style="width:100%;height:100%;border-radius:8px;"><source src="${esc(mp4)}" type="video/mp4">Trình duyệt không hỗ trợ thẻ video.</video>` :
+            `<div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="15" height="14" rx="2"/><path d="M17 10l5-3v10l-5-3"/></svg><div style="font-weight:600">Video bài này đang được sản xuất</div><div style="font-size:13px;opacity:.8;margin-top:4px">Bạn vẫn có thể học tiếp thuật ngữ và tự kiểm tra ở các bước sau.</div></div>`;
+
+  el.innerHTML = head() + `<div class="player">${v}</div>` + navBtns(yt || mp4 ? "Đã xem xong →" : "Bỏ qua, học thuật ngữ →");
+  wireNav();
 }
 function stTerms(el){
   el.innerHTML=head()+`<div class="terms">${(L.terms||[]).map(t=>`<div class="term"><b lang="en">${esc(t[0])}</b> <span class="vi">· ${esc(t[1])}</span>${t[2]?`<p lang="en">${esc(t[2])}</p>`:""}</div>`).join("")||'<p class="mute">Bài này chưa có thuật ngữ.</p>'}</div>`+
@@ -678,19 +700,70 @@ async function delLesson(id){
   if(r.error)return toast("Lỗi: "+r.error.message);
   toast("Đã xóa bài");await loadData();
 }
-async function saveLesson(e){
-  e.preventDefault();const f=e.target.elements,btn=e.target.querySelector("[type=submit]");btn.disabled=true;
-  try{
-    let url=f.old.value;const file=f.file.files[0];
-    if(file){const nm=Date.now()+"-"+file.name.replace(/[^\w.-]/g,"_");const u=await sb.storage.from(CFG.bucket).upload(nm,file,{contentType:file.type});if(u.error)throw u.error;url=sb.storage.from(CFG.bucket).getPublicUrl(nm).data.publicUrl}
-    const terms=f.terms.value.split("\n").map(s=>s.split("=").map(x=>x.trim())).filter(a=>a.length>=2&&a[0]).map(a=>[a[0],a[1],a.slice(2).join("=")]);
-    const o=f.o.value.split("\n").map(x=>x.trim()).filter(Boolean);
-    const row={title:f.title.value.trim(),course:f.course.value.trim(),minutes:+f.min.value,video_id:ytId(f.yt.value),video_url:url,terms,sum:f.sum.value.trim(),q:f.q.value.trim(),o,a:+f.a.value};
-    const id=f.lid.value;
-    const r=id?await sb.from("lessons").update(row).eq("id",+id):await sb.from("lessons").insert(row);
-    if(r.error)throw r.error;
-    toast(id?"Đã cập nhật bài":"Đã đăng bài");await loadData();
-  }catch(err){toast("Lỗi: "+(err.message||err));btn.disabled=false}
+async function saveLesson(e) {
+  e.preventDefault();
+  const f = e.target.elements, btn = e.target.querySelector("[type=submit]");
+  btn.disabled = true;
+  
+  try {
+    let url = f.old.value;
+    const file = f.file.files[0];
+    
+    if (file) {
+      toast("Đang tải video lên... Vui lòng đợi!");
+      
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+
+      // 1. Xin URL upload tạm thời từ Supabase
+      const { data: uploadData, error: urlError } = await sb.storage
+        .from(CFG.bucket)
+        .createSignedUploadUrl(fileName);
+
+      if (urlError) throw urlError;
+
+      // 2. Dùng FETCH PUT trực tiếp của trình duyệt (tránh đứt HTTP/2 của SDK)
+      const uploadResponse = await fetch(uploadData.signedUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': file.type || 'video/mp4' },
+        body: file
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error(`Upload thất bại: ${uploadResponse.statusText}`);
+      }
+
+      // 3. Lấy URL công khai của video
+      url = sb.storage.from(CFG.bucket).getPublicUrl(fileName).data.publicUrl;
+    }
+
+    const terms = f.terms.value.split("\n").map(s => s.split("=").map(x => x.trim())).filter(a => a.length >= 2 && a[0]).map(a => [a[0], a[1], a.slice(2).join("=")]);
+    const o = f.o.value.split("\n").map(x => x.trim()).filter(Boolean);
+    const row = { 
+      title: f.title.value.trim(), 
+      course: f.course.value.trim(), 
+      minutes: +f.min.value, 
+      video_id: ytId(f.yt.value), 
+      video_url: url, 
+      terms, 
+      sum: f.sum.value.trim(), 
+      q: f.q.value.trim(), 
+      o, 
+      a: +f.a.value 
+    };
+    
+    const id = f.lid.value;
+    const r = id ? await sb.from("lessons").update(row).eq("id", +id) : await sb.from("lessons").insert(row);
+    if (r.error) throw r.error;
+    
+    toast(id ? "Đã cập nhật bài thành công!" : "Đã đăng bài thành công!");
+    await loadData();
+  } catch (err) {
+    console.error(err);
+    toast("Lỗi upload: " + (err.message || "Không thể tải file lên"));
+  } finally {
+    btn.disabled = false;
+  }
 }
 
 (async()=>{
