@@ -1,4 +1,3 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -66,7 +65,7 @@ header .tools{margin-left:auto;display:flex;gap:8px}
 @media(min-width:861px){header .tools{margin-left:8px}}
 
 /* Bottom nav (mobile) */
-nav.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(min-width:861px){nav.tabbar{display:none}}
 nav.tabbar a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 4px 8px;text-decoration:none;color:var(--mute);font-size:12px;font-weight:600}
 nav.tabbar a svg{width:22px;height:22px}
@@ -133,6 +132,7 @@ nav.tabbar a[aria-current="page"]{color:var(--brand)}
 .tag{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--soft);color:var(--mute)}
 .tag.ok{background:var(--ok-soft);color:var(--ok)}
 .tag.wait{background:var(--amber-soft);color:var(--c2)}
+.tag.bad{background:var(--bad-soft);color:var(--bad)}
 .empty{padding:28px;text-align:center;color:var(--mute)}
 
 /* Lesson view */
@@ -179,6 +179,11 @@ nav.tabbar a[aria-current="page"]{color:var(--brand)}
 .fb.no{display:block;background:var(--bad-soft);color:var(--bad)}
 .qbar{height:6px;border-radius:3px;background:var(--soft);overflow:hidden;margin-bottom:16px}
 .qbar i{display:block;height:100%;background:var(--brand);transition:width .3s}
+
+/* Practice Styles */
+.p-card{margin-bottom:16px;padding:20px}
+.p-card .explanation{margin-top:14px;padding:14px;background:var(--soft);border-radius:10px;border-left:4px solid var(--brand);display:none}
+.p-card .explanation.show{display:block}
 
 /* Flashcard */
 .flash{position:relative;width:100%;height:220px;perspective:1000px;border:0;background:none;padding:0;cursor:pointer}
@@ -246,6 +251,7 @@ footer a{color:var(--mute)}
     </a>
     <nav class="desk" aria-label="Điều hướng chính">
       <a href="#/" data-nav="home">Bài học</a>
+      <a href="#/practice" data-nav="practice">Bài tập</a>
       <a href="#/review" data-nav="review">Ôn thuật ngữ</a>
       <a href="#/progress" data-nav="progress">Tiến độ của tôi</a>
     </nav>
@@ -307,6 +313,18 @@ footer a{color:var(--mute)}
   <!-- ========== BÀI HỌC ========== -->
   <section class="view" id="v-lesson" aria-live="polite"></section>
 
+  <!-- ========== BÀI TẬP ========== -->
+  <section class="view" id="v-practice" aria-labelledby="h-practice">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:10px">
+      <div>
+        <h1 id="h-practice" style="font-size:clamp(22px,4vw,30px)">Bài tập</h1>
+        <p class="mute" style="margin:0">Bài tập tổng hợp gồm Trắc nghiệm & Tự luận có đáp án chi tiết.</p>
+      </div>
+    </div>
+    <div class="chips" id="pCourseFilters" role="group" aria-label="Chọn đề kiểm tra"></div>
+    <div id="pExamBox" style="margin-top:16px"></div>
+  </section>
+
   <!-- ========== ÔN THUẬT NGỮ ========== -->
   <section class="view" id="v-review" aria-labelledby="h-review">
     <h1 id="h-review" style="font-size:clamp(22px,4vw,30px);margin-bottom:6px">Ôn thuật ngữ</h1>
@@ -354,6 +372,7 @@ footer a{color:var(--mute)}
 
 <nav class="tabbar" aria-label="Điều hướng chính">
   <a href="#/" data-nav="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h7M8 11h5"/></svg>Bài học</a>
+  <a href="#/practice" data-nav="practice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Bài tập</a>
   <a href="#/review" data-nav="review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="14" height="14" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/></svg>Ôn tập</a>
   <a href="#/progress" data-nav="progress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Tiến độ</a>
 </nav>
@@ -367,11 +386,42 @@ const CFG = {
     key: "sb_publishable_YsDcJvRkFb2oYzb2naiRMQ_dWihYIx5",
     bucket: "videos"
 };
-/* Thứ tự & màu học phần theo đề cương. Tên phải trùng với cột "course" trong Supabase. */
 const COURSE_ORDER=["Microeconomics","Macroeconomics","Principles of Finance"];
 const COURSE_VI={"Microeconomics":"Kinh tế vi mô","Macroeconomics":"Kinh tế vĩ mô","Principles of Finance":"Nguyên lý tài chính"};
 
-/* Dữ liệu mẫu – chỉ hiển thị khi chưa kết nối được Supabase */
+/* Dữ liệu bài tập mẫu cho 3 môn */
+const EXAMS = {
+  "Microeconomics": {
+    title: "Bài tập Kinh tế vi mô",
+    mcq: [
+      { q: "If the price of coffee increases by 10% and quantity demanded drops by 20%, demand is:", o: ["Inelastic (0.5)", "Elastic (2.0)", "Unitary elastic (1.0)", "Perfectly inelastic"], a: 1, exp: "<b>Lời giải chi tiết:</b> $E_d = \\frac{\\%\\Delta Q}{\\%\\Delta P} = \\frac{-20\\%}{10\\%} = -2$. Giá trị tuyệt đối là 2.0 > 1 nên cầu co giãn nhiều (Elastic)." },
+      { q: "Which of the following will cause a SHIFT in the demand curve for tea?", o: ["A change in the price of tea", "An increase in consumer income", "A change in production cost of tea", "A tax on tea sellers"], a: 1, exp: "<b>Lời giải chi tiết:</b> Thu nhập người tiêu dùng thay đổi làm dịch chuyển toàn bộ đường cầu. Giá trà thay đổi chỉ gây di chuyển dọc đường cầu." }
+    ],
+    essay: [
+      { q: "Distinguish between Opportunity Cost and Accounting Cost with a real-world example.", exp: "<b>Lời giải chi tiết:</b><br>- <b>Accounting Cost (Chi phí kế toán):</b> Chi phí tiền mặt thực tế chi ra.<br>- <b>Opportunity Cost (Chi phí cơ hội):</b> Giá trị của phương án tốt nhất bị bỏ qua (Ví dụ: Bỏ việc lương $1,000/tháng để đi học thì $1,000 đó là chi phí cơ hội)." }
+    ]
+  },
+  "Macroeconomics": {
+    title: "Bài tập Kinh tế vĩ mô",
+    mcq: [
+      { q: "Which item is directly included in the calculation of current year GDP?", o: ["Sale of a 2020 used car", "Government spending on a new public highway", "Purchase of company stocks", "Steel sold to an automobile manufacturer"], a: 1, exp: "<b>Lời giải chi tiết:</b> Chi tiêu chính phủ xây đường cao tốc mới ($G$) tạo ra sản phẩm/dịch vụ mới trong năm. Xe cũ và cổ phiếu không tính vào GDP." }
+    ],
+    essay: [
+      { q: "Why does high inflation reduce real purchasing power if wages stay constant?", exp: "<b>Lời giải chi tiết:</b><br>Khi lạm phát cao mà tiền lương danh nghĩa không đổi, sức mua thực tế bị giảm vì $\\text{Real Wage} = \\frac{\\text{Nominal Wage}}{\\text{Price Level}}$. Cùng một số tiền lương sẽ mua được ít hàng hóa hơn." }
+    ]
+  },
+  "Principles of Finance": {
+    title: "Bài tập Nguyên lý tài chính",
+    mcq: [
+      { q: "If nominal interest rate is 8% and annual inflation is 3%, the real interest rate is approximately:", o: ["11%", "5%", "2.66%", "24%"], a: 1, exp: "<b>Lời giải chi tiết:</b> Theo công thức Fisher: $\\text{Lãi suất thực} \\approx \\text{Lãi suất danh nghĩa} - \\text{Lạm phát} = 8\\% - 3\\% = 5\\%$." }
+    ],
+    essay: [
+      { q: "Explain the 3 primary functions of money in a modern economy.", exp: "<b>Lời giải chi tiết:</b><br>1. <b>Medium of Exchange:</b> Phương tiện trung gian thanh toán.<br>2. <b>Unit of Account:</b> Đơn vị đo lường định giá.<br>3. <b>Store of Value:</b> Phương tiện cất giữ giá trị theo thời gian." }
+    ]
+  }
+};
+
+/* Dữ liệu mẫu bài giảng */
 const DEMO=[
  {id:1,course:"Microeconomics",title:"Scarcity and Opportunity Cost",min:5,videoId:"",terms:[["scarcity","sự khan hiếm","Limited resources against unlimited wants."],["opportunity cost","chi phí cơ hội","The value of the next best alternative you give up."],["trade-off","sự đánh đổi","Giving up one thing to get another."]],sum:"Every society faces scarcity, so it must choose. Each choice has an opportunity cost: the value of the best alternative given up.",q:"What is opportunity cost?",o:["The money price of a good","The value of the best alternative given up","The cost of production","A government tax"],a:1},
  {id:2,course:"Microeconomics",title:"Demand, Supply and Equilibrium",min:6,videoId:"",terms:[["demand","cầu","Quantity buyers are willing and able to buy at each price."],["supply","cung","Quantity sellers are willing and able to sell at each price."],["equilibrium","trạng thái cân bằng","The price where quantity supplied equals quantity demanded."]],sum:"The market price settles where the demand and supply curves meet. A shift in either curve moves the equilibrium price and quantity.",q:"If demand rises and supply is unchanged, the equilibrium price…",o:["falls","rises","stays the same","becomes zero"],a:1},
@@ -437,7 +487,7 @@ function curve(){
 }
 $("#shift").oninput=curve;curve();
 
-/* ================= ÂM THANH (mặc định TẮT) ================= */
+/* ================= ÂM THANH ================= */
 let AC=null,soundOn=store.get("econhub-sound2",false);
 function tone(f,t0,d,type,vol){if(!soundOn)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+t0;o.type=type||"sine";o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol||.12,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+.02)}catch(e){}}
 const SFX={ok:()=>{tone(523,0,.12);tone(784,.1,.2)},no:()=>{tone(260,0,.18,"triangle",.08)},flip:()=>tone(700,0,.05,"triangle",.05),done:()=>[523,659,784,1047].forEach((f,i)=>tone(f,i*.09,.22,"triangle",.12))};
@@ -473,12 +523,13 @@ rebuild();
 /* ================= ĐIỀU HƯỚNG (hash router) ================= */
 function route(){
   const h=location.hash.replace(/^#\/?/,"");const [page,arg]=h.split("/");
-  const name=page==="lesson"?"lesson":page==="review"?"review":page==="progress"?"progress":page==="admin"?"admin":"home";
+  const name=page==="lesson"?"lesson":page==="practice"?"practice":page==="review"?"review":page==="progress"?"progress":page==="admin"?"admin":"home";
   $$(".view").forEach(v=>v.classList.toggle("on",v.id==="v-"+name));
   const navName=name==="lesson"?"home":name;
   $$("[data-nav]").forEach(a=>{if(a.dataset.nav===navName)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   if(name==="home")renderHome();
   if(name==="lesson")openLesson(+arg,0);
+  if(name==="practice")renderPractice();
   if(name==="review")renderReview();
   if(name==="progress")renderProgress();
   if(name==="admin")renderAdm();
@@ -537,7 +588,6 @@ function stVideo(el) {
   let yt = L.videoId || "";
   let mp4 = L.videoUrl || "";
 
-  // Tự động chuyển đổi nếu người dùng dán link MP4 vào ô YouTube/ID
   if (yt && (yt.startsWith("http") || yt.includes(".mp4"))) {
     if (yt.includes(".mp4") || yt.includes("/storage/v1/object/public/")) {
       mp4 = yt;
@@ -618,6 +668,83 @@ function finish(r){
    <p class="mute" style="margin:0 0 18px">${all?"Bạn đã hoàn thành cả 5 bước của bài này.":"Bạn còn "+(5-doneCount(L.id))+" bước chưa hoàn thành – bấm vào thanh bước phía trên để quay lại."}</p>
    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">${nx?`<a class="btn" href="#/lesson/${nx.id}">Bài tiếp: ${esc(nx.title)} →</a>`:""}<button class="btn ghost" id="redo">Làm lại quiz</button><a class="btn ghost" href="#/review">Ôn thuật ngữ</a></div></div>`;
   $("#redo").onclick=()=>{step=4;renderLesson()};
+}
+
+/* ================= BÀI TẬP / KIỂM TRA ================= */
+let currentExamCourse = "Microeconomics", examTimer = null, timeLeft = 900;
+
+function renderPractice() {
+  $("#pCourseFilters").innerHTML = COURSE_ORDER.map(c => 
+    `<button class="chip" aria-pressed="${currentExamCourse===c}" data-c="${c}">${courseVi(c)}</button>`
+  ).join("");
+
+  $$("#pCourseFilters .chip").forEach(b => b.onclick = () => {
+    currentExamCourse = b.dataset.c;
+    renderPractice();
+  });
+
+  const exam = EXAMS[currentExamCourse];
+  if (!exam) return;
+
+  let html = `<div class="card p-card">
+    <div style="margin-bottom:14px">
+      <h2 style="font-size:18px">${exam.title}</h2>
+    </div>
+    <form id="examForm">
+      <h3 style="font-size:16px;color:var(--brand);margin-bottom:10px">PHẦN 1: TRẮC NGHIỆM</h3>`;
+
+  exam.mcq.forEach((q, i) => {
+    html += `<div style="margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line)">
+      <p class="q" lang="en">Câu ${i+1}: ${esc(q.q)}</p>
+      ${q.o.map((opt, oi) => `
+        <label class="opt" style="cursor:pointer">
+          <input type="radio" name="mcq_${i}" value="${oi}">
+          <span><b>${"ABCD"[oi]}.</b> ${esc(opt)}</span>
+        </label>
+      `).join("")}
+      <div class="explanation" id="exp_mcq_${i}">${q.exp}</div>
+    </div>`;
+  });
+
+  html += `<h3 style="font-size:16px;color:var(--brand);margin:20px 0 10px">PHẦN 2: TỰ LUẬN</h3>`;
+  exam.essay.forEach((q, i) => {
+    html += `<div style="margin-bottom:16px">
+      <p class="q" lang="en">Câu ${i+1}: ${esc(q.q)}</p>
+      <textarea class="adm-form" style="width:100%;min-height:80px" placeholder="Nhập bài làm tự luận của bạn vào đây..."></textarea>
+      <div class="explanation" id="exp_essay_${i}">${q.exp}</div>
+    </div>`;
+  });
+
+  html += `<div style="margin-top:20px;display:flex;gap:10px">
+    <button class="btn" type="submit">Nộp bài & Xem lời giải chi tiết</button>
+  </div></form></div>`;
+
+  $("#pExamBox").innerHTML = html;
+
+  $("#examForm").onsubmit = (e) => {
+    e.preventDefault();
+    $$(".explanation").forEach(el => el.style.display = "block");
+    toast("Đã hoàn thành! Xem đáp án chi tiết phía dưới.");
+  };
+}
+function startExamTimer() {
+  clearInterval(examTimer);
+  timeLeft = 900;
+  examTimer = setInterval(() => {
+    timeLeft--;
+    const m = Math.floor(timeLeft / 60), s = timeLeft % 60;
+    $("#pTimerBox").innerHTML = `<span class="tag bad" style="font-size:14px">Thời gian còn lại: ${m}:${s<10?'0':''}${s}</span>`;
+    if (timeLeft <= 0) {
+      clearInterval(examTimer);
+      $("#examForm").dispatchEvent(new Event("submit"));
+    }
+  }, 1000);
+  $("#startTimerBtn").disabled = true;
+}
+
+function resetExamTimer() {
+  clearInterval(examTimer);
+  $("#pTimerBox").innerHTML = "";
 }
 
 /* ================= ÔN THUẬT NGỮ ================= */
@@ -715,14 +842,12 @@ async function saveLesson(e) {
       const fileExt = file.name.split('.').pop();
       const fileName = `${Date.now()}.${fileExt}`;
 
-      // 1. Xin URL upload tạm thời từ Supabase
       const { data: uploadData, error: urlError } = await sb.storage
         .from(CFG.bucket)
         .createSignedUploadUrl(fileName);
 
       if (urlError) throw urlError;
 
-      // 2. Dùng FETCH PUT trực tiếp của trình duyệt (tránh đứt HTTP/2 của SDK)
       const uploadResponse = await fetch(uploadData.signedUrl, {
         method: 'PUT',
         headers: { 'Content-Type': file.type || 'video/mp4' },
@@ -733,7 +858,6 @@ async function saveLesson(e) {
         throw new Error(`Upload thất bại: ${uploadResponse.statusText}`);
       }
 
-      // 3. Lấy URL công khai của video
       url = sb.storage.from(CFG.bucket).getPublicUrl(fileName).data.publicUrl;
     }
 
@@ -774,4 +898,3 @@ async function saveLesson(e) {
 </script>
 </body>
 </html>
-</body></html>
