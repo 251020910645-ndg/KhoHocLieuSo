@@ -241,7 +241,7 @@ footer a{color:var(--mute)}
 @media(min-width:861px){#toast{bottom:24px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/supabase/2.45.4/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 <svg id="bgart" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true"></svg>
@@ -787,10 +787,7 @@ function renderProgress(){
 
 /* ================= BACKEND (Supabase) + QUẢN TRỊ ================= */
 const sb = (CFG.url && CFG.key && typeof supabase !== "undefined") 
-  ? supabase.createClient(CFG.url, CFG.key, {
-      auth: { persistSession: true },
-      global: { headers: { 'Cache-Control': 'no-cache, no-store' } }
-    }) 
+  ? supabase.createClient(CFG.url, CFG.key) 
   : null;
 let user=null;
 const fromRow=r=>({id:r.id,course:r.course,title:r.title,min:r.minutes,videoId:r.video_id||"",videoUrl:r.video_url||"",terms:r.terms||[],sum:r.sum||"",q:r.q||"",o:r.o||[],a:r.a||0});
