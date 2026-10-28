@@ -241,7 +241,7 @@ footer a{color:var(--mute)}
 @media(min-width:861px){#toast{bottom:24px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/supabase/2.45.4/supabase.min.js" integrity="sha512-Y455o/sF9dD/I79oQ11Uj5L4E0m8P9M9a4v7rWw4A4z+Z0wJ7V3z5I63eLz6K+o4+P1+30K+J9zQ1g89A1J2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
 <svg id="bgart" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true"></svg>
@@ -786,7 +786,10 @@ function renderProgress(){
 }
 
 /* ================= BACKEND (Supabase) + QUẢN TRỊ ================= */
-const sb=(CFG.url&&window.supabase)?supabase.createClient(CFG.url,CFG.key):null;
+const sb = (CFG.url && window.supabase) ? supabase.createClient(CFG.url, CFG.key, {
+  auth: { persistSession: true },
+  global: { headers: { 'Cache-Control': 'no-cache, no-store' } }
+}) : null;
 let user=null;
 const fromRow=r=>({id:r.id,course:r.course,title:r.title,min:r.minutes,videoId:r.video_id||"",videoUrl:r.video_url||"",terms:r.terms||[],sum:r.sum||"",q:r.q||"",o:r.o||[],a:r.a||0});
 async function loadData(){
