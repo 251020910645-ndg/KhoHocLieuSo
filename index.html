@@ -422,15 +422,7 @@ const EXAMS = {
 };
 
 /* Dữ liệu mẫu bài giảng */
-const DEMO=[
- {id:1,course:"Microeconomics",title:"Scarcity and Opportunity Cost",min:5,videoId:"",terms:[["scarcity","sự khan hiếm","Limited resources against unlimited wants."],["opportunity cost","chi phí cơ hội","The value of the next best alternative you give up."],["trade-off","sự đánh đổi","Giving up one thing to get another."]],sum:"Every society faces scarcity, so it must choose. Each choice has an opportunity cost: the value of the best alternative given up.",q:"What is opportunity cost?",o:["The money price of a good","The value of the best alternative given up","The cost of production","A government tax"],a:1},
- {id:2,course:"Microeconomics",title:"Demand, Supply and Equilibrium",min:6,videoId:"",terms:[["demand","cầu","Quantity buyers are willing and able to buy at each price."],["supply","cung","Quantity sellers are willing and able to sell at each price."],["equilibrium","trạng thái cân bằng","The price where quantity supplied equals quantity demanded."]],sum:"The market price settles where the demand and supply curves meet. A shift in either curve moves the equilibrium price and quantity.",q:"If demand rises and supply is unchanged, the equilibrium price…",o:["falls","rises","stays the same","becomes zero"],a:1},
- {id:3,course:"Microeconomics",title:"Price Elasticity of Demand",min:5,videoId:"",terms:[["elasticity","độ co giãn","How strongly quantity responds to a change in price."],["substitute","hàng hóa thay thế","A good that can replace another."]],sum:"Demand is elastic when consumers react strongly to price changes. Goods with many substitutes tend to be more elastic.",q:"Which good is likely MOST price elastic?",o:["Insulin","Salt","A specific brand of soda","Electricity"],a:2},
- {id:4,course:"Macroeconomics",title:"Measuring GDP",min:6,videoId:"",terms:[["GDP","tổng sản phẩm quốc nội","Total market value of final goods and services produced in a country in a period."],["final good","hàng hóa cuối cùng","A good sold to its end user."]],sum:"GDP measures the size of an economy. Only final goods are counted to avoid double counting.",q:"GDP counts…",o:["All goods ever made","Final goods and services produced in a period","Only exports","Only government spending"],a:1},
- {id:5,course:"Macroeconomics",title:"Inflation and Purchasing Power",min:5,videoId:"",terms:[["inflation","lạm phát","A sustained rise in the general price level."],["purchasing power","sức mua","How much a unit of money can buy."],["CPI","chỉ số giá tiêu dùng","An index of prices of a typical basket of consumer goods."]],sum:"When inflation rises, each unit of money buys less, so purchasing power falls. Inflation is often measured with the CPI.",q:"Inflation reduces…",o:["Prices","Purchasing power","Output","Population"],a:1},
- {id:6,course:"Principles of Finance",title:"Functions of Money",min:5,videoId:"",terms:[["medium of exchange","phương tiện trao đổi","Something widely accepted in payment for goods and services."],["store of value","phương tiện cất trữ giá trị","A way to hold purchasing power over time."],["unit of account","đơn vị đo lường giá trị","A common measure for stating prices."]],sum:"Money serves as a medium of exchange, a unit of account and a store of value.",q:"Using VND to compare the prices of two phones is an example of money as a…",o:["store of value","medium of exchange","unit of account","liability"],a:2},
- {id:7,course:"Principles of Finance",title:"Interest Rates and the Central Bank",min:7,videoId:"",terms:[["interest rate","lãi suất","The price of borrowing money."],["central bank","ngân hàng trung ương","The institution that manages a country's money supply."],["monetary policy","chính sách tiền tệ","Central bank actions that influence money supply and interest rates."]],sum:"Central banks raise interest rates to cool inflation and cut them to encourage borrowing and growth.",q:"To fight high inflation, a central bank usually…",o:["Cuts interest rates","Raises interest rates","Prints more money","Removes bank reserves"],a:1}
-];
+const DEMO=[];
 const STEPS=[
  {k:"video",t:"Video",goal:"Mục tiêu: hiểu khái niệm cốt lõi qua bài giảng ngắn."},
  {k:"terms",t:"Key terms",goal:"Mục tiêu: nắm thuật ngữ trọng tâm và hệ thống hóa nội dung bài."},
@@ -559,7 +551,8 @@ function cardHTML(l){
   const s=stepsOf(l.id),hasVid=l.videoId||l.videoUrl;
   const status=isDone(l.id)?'<span class="tag ok">✓ Đã hoàn thành</span>':!hasVid?'<span class="tag wait">Video đang sản xuất</span>':`<span class="tag">${l.min} phút</span>`;
   const no=LESSONS.filter(x=>x.course===l.course).indexOf(l)+1;
-  return `<a class="card lcard" href="#/lesson/${l.id}" style="--cc:${courseColor(l.course)};text-decoration:none;color:inherit"><div class="top"></div><div class="in"><div class="meta"><span class="course">${esc(courseVi(l.course))} · Bài ${no}</span>${status}</div><h3>${esc(l.title)}</h3><span class="mute" style="font-size:13px">${(l.terms||[]).length} thuật ngữ · ${l.q?1:0} câu tự kiểm tra</span><div class="foot"><div class="dots" aria-label="Đã xong ${doneCount(l.id)}/5 bước">${s.map(x=>`<i class="${x?"on":""}"></i>`).join("")}</div><span>${doneCount(l.id)}/5 bước</span></div></div></a>`;
+  const qCount = (l.questions && l.questions.length) ? l.questions.length : (l.q ? 1 : 0);
+  return `<a class="card lcard" href="#/lesson/${l.id}" style="--cc:${courseColor(l.course)};text-decoration:none;color:inherit"><div class="top"></div><div class="in"><div class="meta"><span class="course">${esc(courseVi(l.course))} · Bài ${no}</span>${status}</div><h3>${esc(l.title)}</h3><span class="mute" style="font-size:13px">${(l.terms||[]).length} thuật ngữ · ${qCount} câu tự kiểm tra</span><div class="foot"><div class="dots" aria-label="Đã xong ${doneCount(l.id)}/5 bước">${s.map(x=>`<i class="${x?"on":""}"></i>`).join("")}</div><span>${doneCount(l.id)}/5 bước</span></div></div></a>`;
 }
 
 /* ================= BÀI HỌC (vòng học 5 bước) ================= */
@@ -610,15 +603,48 @@ function stTerms(el){
 }
 function optsHTML(arr){return arr.map((t,i)=>`<button class="opt" data-i="${i}"><span class="l">${"ABCD"[i]||i+1}</span><span lang="en">${esc(t)}</span></button>`).join("")}
 function stCheck(el){
-  if(!L.q||!(L.o||[]).length){el.innerHTML=head()+'<p class="mute">Bài này chưa có câu hỏi tự kiểm tra.</p>'+navBtns();wireNav();return}
-  el.innerHTML=head()+`<p class="q" lang="en">${esc(L.q)}</p><div id="co">${optsHTML(L.o)}</div><div class="fb" id="cfb"></div>`+navBtns("Tiếp tục →",true);wireNav();
-  $$("#co .opt").forEach(b=>b.onclick=()=>{
-    const right=+b.dataset.i===L.a;$$("#co .opt").forEach(x=>{x.disabled=true;if(+x.dataset.i===L.a)x.classList.add("ok")});
-    if(!right)b.classList.add("no");right?SFX.ok():SFX.no();
-    $("#cfb").className="fb "+(right?"ok":"no");$("#cfb").textContent=right?"Chính xác! Bạn đã hiểu ý chính của bài.":"Chưa đúng. Đáp án đúng được tô xanh – hãy xem lại phần Summary ở bước 2.";
-    $("#next").disabled=false;
-  });
+  const qList = (L.questions && L.questions.length) ? L.questions : (L.q ? [{q: L.q, o: L.o, a: L.a}] : []);
+  if(!qList.length){el.innerHTML=head()+'<p class="mute">Bài này chưa có câu hỏi tự kiểm tra.</p>'+navBtns();wireNav();return}
+  
+  let qIdx = 0;
+  function drawQ(){
+    const currentQ = qList[qIdx];
+    el.innerHTML = head() + `
+      <p class="mute" style="font-size:13px;margin:0 0 4px">Câu ${qIdx+1}/${qList.length}</p>
+      <p class="q" lang="en">${esc(currentQ.q)}</p>
+      <div id="co">${optsHTML(currentQ.o)}</div>
+      <div class="fb" id="cfb"></div>
+      <div class="nav">
+        ${step > 0 ? '<button class="btn ghost" id="back">← Bước trước</button>' : '<span></span>'}
+        <button class="btn" id="next" disabled>${qIdx < qList.length - 1 ? 'Câu tiếp theo →' : 'Tiếp tục →'}</button>
+      </div>`;
+    
+    if($("#back")) $("#back").onclick = () => { step--; renderLesson(); };
+    
+    $$("#co .opt").forEach(b => b.onclick = () => {
+      const right = +b.dataset.i === currentQ.a;
+      $$("#co .opt").forEach(x => { x.disabled = true; if(+x.dataset.i === currentQ.a) x.classList.add("ok"); });
+      if(!right) b.classList.add("no");
+      right ? SFX.ok() : SFX.no();
+      $("#cfb").className = "fb " + (right ? "ok" : "no");
+      $("#cfb").textContent = right ? "Chính xác! Bạn đã hiểu ý chính của bài." : "Chưa đúng. Đáp án đúng được tô xanh – hãy xem lại phần Summary ở bước 2.";
+      $("#next").disabled = false;
+    });
+
+    $("#next").onclick = () => {
+      if(qIdx < qList.length - 1) {
+        qIdx++;
+        drawQ();
+      } else {
+        markStep(L.id, step);
+        step++;
+        renderLesson();
+      }
+    };
+  }
+  drawQ();
 }
+
 function flashWidget(host,terms,onFlip){
   let i=0;
   function draw(){
@@ -727,25 +753,6 @@ function renderPractice() {
     toast("Đã hoàn thành! Xem đáp án chi tiết phía dưới.");
   };
 }
-function startExamTimer() {
-  clearInterval(examTimer);
-  timeLeft = 900;
-  examTimer = setInterval(() => {
-    timeLeft--;
-    const m = Math.floor(timeLeft / 60), s = timeLeft % 60;
-    $("#pTimerBox").innerHTML = `<span class="tag bad" style="font-size:14px">Thời gian còn lại: ${m}:${s<10?'0':''}${s}</span>`;
-    if (timeLeft <= 0) {
-      clearInterval(examTimer);
-      $("#examForm").dispatchEvent(new Event("submit"));
-    }
-  }, 1000);
-  $("#startTimerBtn").disabled = true;
-}
-
-function resetExamTimer() {
-  clearInterval(examTimer);
-  $("#pTimerBox").innerHTML = "";
-}
 
 /* ================= ÔN THUẬT NGỮ ================= */
 let rf="all";
@@ -784,16 +791,62 @@ function renderProgress(){
 
 /* ================= BACKEND (Supabase) + QUẢN TRỊ ================= */
 const sb = (CFG.url && CFG.key && typeof supabase !== "undefined") 
-  ? supabase.createClient(CFG.url, CFG.key) 
+  ? supabase.createClient(CFG.url, CFG.key, {
+      auth: { persistSession: true },
+      global: { headers: { 'Cache-Control': 'no-cache, no-store' } }
+    }) 
   : null;
 let user=null;
-const fromRow=r=>({id:r.id,course:r.course,title:r.title,min:r.minutes,videoId:r.video_id||"",videoUrl:r.video_url||"",terms:r.terms||[],sum:r.sum||"",q:r.q||"",o:r.o||[],a:r.a||0});
+const fromRow=r=>({id:r.id,course:r.course,title:r.title,min:r.minutes,videoId:r.video_id||"",videoUrl:r.video_url||"",terms:r.terms||[],sum:r.sum||"",q:r.q||"",o:r.o||[],a:r.a||0,questions:r.questions||[]});
 async function loadData(){
   if(!sb){LESSONS=DEMO;rebuild();route();return}
   const r=await sb.from("lessons").select("*");
   if(r.error){toast("Không tải được dữ liệu, đang hiển thị bài mẫu.");LESSONS=DEMO}else LESSONS=r.data.length?r.data.map(fromRow):[];
   rebuild();route();
 }
+
+const DRAFT_KEY = "econhub_admin_draft";
+
+function restoreDraft() {
+  const draft = store.get(DRAFT_KEY, null);
+  const form = $("#af");
+  if (!draft || !form) return;
+  const f = form.elements;
+  if (draft.title && f.title) f.title.value = draft.title;
+  if (draft.course && f.course) f.course.value = draft.course;
+  if (draft.min && f.min) f.min.value = draft.min;
+  if (draft.yt && f.yt) f.yt.value = draft.yt;
+  if (draft.terms && f.terms) f.terms.value = draft.terms;
+  if (draft.sum && f.sum) f.sum.value = draft.sum;
+  if (draft.questions && f.questions) f.questions.value = draft.questions;
+}
+
+function setupAutoSave() {
+  const form = $("#af");
+  if (!form) return;
+  form.oninput = () => {
+    const f = form.elements;
+    const draftData = {
+      title: f.title ? f.title.value : "",
+      course: f.course ? f.course.value : "",
+      min: f.min ? f.min.value : "",
+      yt: f.yt ? f.yt.value : "",
+      terms: f.terms ? f.terms.value : "",
+      sum: f.sum ? f.sum.value : "",
+      questions: f.questions ? f.questions.value : ""
+    };
+    store.set(DRAFT_KEY, draftData);
+  };
+}
+
+window.onbeforeunload = (e) => {
+  const form = $("#af");
+  if (form && (form.elements.title?.value.trim() || form.elements.questions?.value.trim())) {
+    e.preventDefault();
+    return (e.returnValue = "Bạn có nội dung chưa lưu, bạn có chắc muốn rời đi?");
+  }
+};
+
 function renderAdm(){
   const b=$("#admBox");
   if(!sb){b.innerHTML='<div class="card adm-form"><p class="mute" style="margin:0">Chưa kết nối Supabase. Điền <b>CFG.url</b> và <b>CFG.key</b> trong index.html.</p></div>';return}
@@ -804,31 +857,79 @@ function renderAdm(){
   }
   b.innerHTML=`<p class="mute">Đang đăng nhập: ${esc(user.email)} <button class="btn ghost sm" id="lo">Đăng xuất</button></p>
   <form class="card adm-form" id="af"><input type="hidden" name="lid"><input type="hidden" name="old">
-  <div class="adm-2"><label>Tên bài giảng (tiếng Anh)<input name="title" required></label>
+  <div class="adm-2"><label>Tên bài giảng<input name="title" required></label>
   <label>Học phần<select name="course" required>${[...new Set([...COURSE_ORDER,...COURSES])].map(c=>`<option value="${esc(c)}">${esc(courseVi(c))} (${esc(c)})</option>`).join("")}</select></label></div>
   <div class="adm-2"><label>Thời lượng video (phút)<input name="min" type="number" min="1" max="60" value="5" required></label><label>Link YouTube (hoặc ID)<input name="yt" placeholder="https://youtu.be/..."></label></div>
-  <label>Hoặc tải video lên (.mp4, tối đa 50 MB)<input name="file" type="file" accept="video/*"></label>
+  <label>Tải video (.mp4, tối đa 50 MB)<input name="file" type="file" accept="video/*"></label>
   <label>Key terms (mỗi dòng: english = tiếng Việt = giải nghĩa tiếng Anh)<textarea name="terms" placeholder="demand = cầu = Quantity buyers want at each price."></textarea></label>
   <label>Summary<textarea name="sum"></textarea></label>
-  <label>Câu hỏi Check yourself<input name="q"></label>
-  <div class="adm-2"><label>4 đáp án (mỗi dòng một đáp án)<textarea name="o"></textarea></label><label>Đáp án đúng<select name="a"><option value="0">Dòng 1 (A)</option><option value="1">Dòng 2 (B)</option><option value="2">Dòng 3 (C)</option><option value="3">Dòng 4 (D)</option></select></label></div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" type="submit">Lưu bài</button><button class="btn ghost" type="button" id="cl">Làm mới form</button></div></form>
+
+  <label>Danh sách câu hỏi trắc nghiệm (Mỗi câu cách nhau bởi dòng trống. Thêm đúng vào sau đáp án đúng)
+    <textarea name="questions" style="min-height:160px;" placeholder="Câu hỏi 1?
+A. Đáp án A
+B. Đáp án B (đúng)
+C. Đáp án C
+D. Đáp án D
+
+Câu hỏi 2?
+A. Đáp án A
+B. Đáp án B
+C. Đáp án C (đúng)
+D. Đáp án D"></textarea>
+  </label>
+
+  <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" type="submit">Lưu bài</button></div></form>
   <h2 style="font-size:18px;margin:0 0 10px">Bài đã đăng (${LESSONS.length})</h2><div id="al">${LESSONS.map(l=>`<div class="card adm-row"><span>${esc(l.title)} <small class="mute">· ${esc(courseVi(l.course))}${l.videoId||l.videoUrl?"":" · chưa có video"}</small></span><span style="display:flex;gap:6px"><button class="btn ghost sm" data-e="${l.id}">Sửa</button><button class="btn bad sm" data-d="${l.id}">Xóa</button></span></div>`).join("")||'<p class="mute">Chưa có bài nào.</p>'}</div>`;
-  $("#lo").onclick=()=>sb.auth.signOut();$("#cl").onclick=renderAdm;$("#af").onsubmit=saveLesson;
+  
+  $("#lo").onclick=()=>sb.auth.signOut();
+  $("#af").onsubmit=saveLesson;
+  
+  // Tự động kích hoạt lưu nháp & khôi phục dữ liệu
+  setupAutoSave();
+  restoreDraft();
+
   $("#al").onclick=e=>{const t=e.target.closest("button");if(!t)return;if(t.dataset.e)editLesson(+t.dataset.e);if(t.dataset.d)delLesson(+t.dataset.d)};
 }
+
 function editLesson(id){
-  const l=LESSONS.find(x=>x.id===id),f=$("#af").elements;
-  f.lid.value=l.id;f.old.value=l.videoUrl;f.title.value=l.title;f.course.value=l.course;f.min.value=l.min;f.yt.value=l.videoId;
-  f.terms.value=l.terms.map(t=>t.join(" = ")).join("\n");f.sum.value=l.sum;f.q.value=l.q;f.o.value=l.o.join("\n");f.a.value=l.a;
+  const l = LESSONS.find(x => x.id === id), f = $("#af").elements;
+  f.lid.value = l.id; 
+  f.old.value = l.videoUrl || ""; 
+  f.title.value = l.title; 
+  f.course.value = l.course; 
+  f.min.value = l.min; 
+  f.yt.value = l.videoId || "";
+  f.terms.value = (l.terms || []).map(t => t.join(" = ")).join("\n");
+  f.sum.value = l.sum || "";
+  
+  if (l.questions && l.questions.length) {
+    f.questions.value = l.questions.map(q => {
+      let text = q.q + "\n";
+      q.o.forEach((opt, idx) => {
+        text += `${"ABCD"[idx]}. ${opt}${idx === q.a ? " (đúng)" : ""}\n`;
+      });
+      return text.trim();
+    }).join("\n\n");
+  } else if (l.q) {
+    let text = l.q + "\n";
+    (l.o || []).forEach((opt, idx) => {
+      text += `${"ABCD"[idx]}. ${opt}${idx === l.a ? " (đúng)" : ""}\n`;
+    });
+    f.questions.value = text.trim();
+  } else {
+    f.questions.value = "";
+  }
+  
   $("#af").scrollIntoView({behavior:"smooth"});
 }
+
 async function delLesson(id){
   if(!confirm("Xóa bài giảng này?"))return;
   const r=await sb.from("lessons").delete().eq("id",id);
   if(r.error)return toast("Lỗi: "+r.error.message);
   toast("Đã xóa bài");await loadData();
 }
+
 async function saveLesson(e) {
   e.preventDefault();
   const f = e.target.elements, btn = e.target.querySelector("[type=submit]");
@@ -864,7 +965,25 @@ async function saveLesson(e) {
     }
 
     const terms = f.terms.value.split("\n").map(s => s.split("=").map(x => x.trim())).filter(a => a.length >= 2 && a[0]).map(a => [a[0], a[1], a.slice(2).join("=")]);
-    const o = f.o.value.split("\n").map(x => x.trim()).filter(Boolean);
+    
+    // Đọc danh sách nhiều câu hỏi
+    const rawQuestions = f.questions.value.split(/\n\s*\n/).map(block => block.trim()).filter(Boolean);
+    const parsedQuestions = rawQuestions.map(block => {
+      const lines = block.split("\n").map(l => l.trim()).filter(Boolean);
+      const qText = lines[0];
+      const opts = [];
+      let correctIdx = 0;
+      
+      lines.slice(1).forEach((line, idx) => {
+        let isCorrect = line.includes("(đúng)") || line.includes("(correct)");
+        let cleanOpt = line.replace(/^[A-D][.\s-]*/i, "").replace(/\((đúng|correct)\)/i, "").trim();
+        opts.push(cleanOpt);
+        if (isCorrect) correctIdx = idx;
+      });
+      
+      return { q: qText, o: opts, a: correctIdx };
+    });
+
     const row = { 
       title: f.title.value.trim(), 
       course: f.course.value.trim(), 
@@ -873,14 +992,18 @@ async function saveLesson(e) {
       video_url: url, 
       terms, 
       sum: f.sum.value.trim(), 
-      q: f.q.value.trim(), 
-      o, 
-      a: +f.a.value 
+      questions: parsedQuestions,
+      q: parsedQuestions[0]?.q || "",
+      o: parsedQuestions[0]?.o || [],
+      a: parsedQuestions[0]?.a || 0
     };
     
     const id = f.lid.value;
     const r = id ? await sb.from("lessons").update(row).eq("id", +id) : await sb.from("lessons").insert(row);
     if (r.error) throw r.error;
+    
+    // Xóa nháp sau khi lưu thành công
+    store.set(DRAFT_KEY, null);
     
     toast(id ? "Đã cập nhật bài thành công!" : "Đã đăng bài thành công!");
     await loadData();
