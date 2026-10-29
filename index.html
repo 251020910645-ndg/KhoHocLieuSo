@@ -2,12 +2,9 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>EconHub – Học Kinh tế – Tài chính bằng tiếng Anh</title>
-<meta name="description" content="Nền tảng học liệu số giúp sinh viên khối kinh tế ĐHQGHN học Kinh tế vi mô, Kinh tế vĩ mô và Nguyên lý tài chính bằng tiếng Anh qua vòng học 5 bước.">
+<meta name="description" content="Nền tảng học liệu số giúp sinh viên khối Kinh tế ĐHQGHN học Kinh tế vi mô, Kinh tế vĩ mô và Nguyên lý tài chính bằng tiếng Anh qua vòng học 5 bước.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
@@ -274,9 +271,9 @@ footer a{color:var(--mute)}
   <section class="view" id="v-home" aria-labelledby="h-home">
     <div class="hero">
       <div>
-        <span class="eyebrow">Học liệu số cho sinh viên khối kinh tế · ĐHQGHN</span>
+        <span class="eyebrow">Học liệu số cho sinh viên khối Kinh tế · ĐHQGHN</span>
         <h1 id="h-home">Học Kinh tế – Tài chính <em>bằng tiếng Anh</em></h1>
-        <p>Mỗi bài học bám sát học phần, đi qua 5 bước: xem video ngắn, nắm thuật ngữ, tự kiểm tra, ôn thẻ ghi nhớ và làm quiz. Học xong bài nào, bạn biết ngay mình hiểu đến đâu.</p>
+        <p>Mỗi bài học được thiết kế bám sát nội dung học phần với 5 bước: xem video ngắn, nắm vững thuật ngữ, tự kiểm tra kiến thức, ôn tập bằng thẻ ghi nhớ và hoàn thành bài quiz. Sau mỗi bài học, bạn có thể dễ dàng đánh giá mức độ hiểu bài và theo dõi tiến độ học tập của mình.</p>
         <div class="cta" id="heroCta"></div>
       </div>
       <div class="card chart" aria-label="Minh họa cung cầu">
@@ -368,7 +365,7 @@ footer a{color:var(--mute)}
 
 <footer>
   <div class="wrap">
-    <span>EconHub · Dự án đổi mới sáng tạo – Khoa Giáo dục Quốc tế, Trường ĐH Ngoại ngữ, ĐHQGHN</span>
+    <span>EconHub · Dự án Đổi mới sáng tạo – Khoa Giáo dục Quốc tế, Trường ĐH Ngoại ngữ, ĐHQGHN</span>
     <a href="#/admin">Dành cho nhóm biên soạn</a>
   </div>
 </footer>
@@ -480,12 +477,12 @@ const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.
 function curve(){
   const s=+$("#shift").value,X=q=>40+q*3.4,Y=p=>250-p*1.55;
   const set=(id,q1,p1,q2,p2)=>{const e=$(id);e.setAttribute("x1",X(q1));e.setAttribute("y1",Y(p1));e.setAttribute("x2",X(q2));e.setAttribute("y2",Y(p2))};
-  set("#dL",0,100+s,95,5+s);set("#sL",0,20,95,115);
+  const dq1=Math.max(0,s-48),dq2=Math.min(95,100+s);set("#dL",dq1,100+s-dq1,dq2,100+s-dq2);set("#sL",0,20,95,115);
   const q=(80+s)/2,p=20+q;
   $("#pt").setAttribute("cx",X(q));$("#pt").setAttribute("cy",Y(p));
   set("#vq",q,0,q,p);set("#vp",0,p,q,p);
-  $("#dT").setAttribute("x",X(80));$("#dT").setAttribute("y",Y(25+s)-8);
-  $("#sT").setAttribute("x",X(78));$("#sT").setAttribute("y",Y(98)-8);
+  const dql=Math.min(80,dq2);$("#dT").setAttribute("x",X(dql));$("#dT").setAttribute("y",Y(105+s-dql)-8);
+  $("#sT").setAttribute("x",X(95));$("#sT").setAttribute("y",Y(115)-12);$("#sT").setAttribute("text-anchor","end");
   $("#eq").textContent="Equilibrium: price "+p.toFixed(0)+", quantity "+q.toFixed(0);
 }
 $("#shift").oninput=curve;curve();
